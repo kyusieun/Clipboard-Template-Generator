@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">UISetting</string>
+    <string name="Setting_Title">Setting</string>
+    <string name="privacy_management">개인정보 관리</string>
+    <string name="profile_name_text">홍 길동</string>
+    <string name="set_account_text">계정 설정</string>
+    <string name="set_profile_text">프로필 변경</string>
+    <string name="set_password_text">비밀번호 변경</string>
+    <string name="accessibility">접근성</string>
+    <string name="floating_Text">플로팅 디스플레이</string>
+    <string name="top_display_text">상단바 디스플레이</string>
+    <string name="data_text">데이터</string>
+    <string name="privacy_management_text">개인정보 관리</string>
+    <string name="bookmark_text">북마크</string>
+
+
+
+</resources>

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F2A579"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Setting_Title"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:textStyle="bold"/>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/profile_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <ImageView
+            android:id="@+id/my_profile_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/profile_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/profile_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/profile_name_text"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/my_profile_image"
+            app:layout_constraintStart_toEndOf="@+id/my_profile_image"
+            app:layout_constraintTop_toTopOf="@+id/my_profile_image"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/bar01"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CACACA"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/profile_view" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/set_account_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/bar01">
+
+        <TextView
+            android:id="@+id/set_account_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/set_account_text"
+            android:textColor="#ADADAD"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/set_profile_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/set_profile_text"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/set_account_text"
+            app:layout_constraintTop_toBottomOf="@+id/set_account_text" />
+
+        <ImageView
+            android:id="@+id/set_profile_icon"
+            android:src="@drawable/arrow_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/set_profile_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/set_profile_text" />
+
+
+        <TextView
+            android:id="@+id/set_password_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/set_password_text"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/set_account_text"
+            app:layout_constraintTop_toBottomOf="@+id/set_profile_text" />
+
+        <ImageView
+            android:id="@+id/set_password_icon"
+            android:src="@drawable/arrow_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/set_password_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/set_password_text" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/bar02"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CACACA"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/set_account_view" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/accessibility_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/bar02">
+
+        <TextView
+            android:id="@+id/accessibility"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@string/accessibility"
+            android:textColor="#ADADAD"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/floating_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/floating_Text"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/accessibility"
+            app:layout_constraintTop_toBottomOf="@+id/accessibility" />
+
+        <Switch
+            android:id="@+id/floating_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/floating_Text"
+            tools:layout_editor_absoluteY="43dp" />
+
+
+
+        <TextView
+            android:id="@+id/top_display_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/top_display_text"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/accessibility"
+            app:layout_constraintTop_toBottomOf="@+id/floating_Text" />
+
+
+        <Switch
+            android:id="@+id/top_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/top_display_text"
+            tools:layout_editor_absoluteY="43dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/bar03"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CACACA"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/accessibility_view" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/data_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/bar03">
+
+        <TextView
+            android:id="@+id/data_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/data_text"
+            android:textColor="#ADADAD"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/privacy_management_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/privacy_management_text"
+            android:textColor="#4B4B4B"
+            app:layout_constraintStart_toStartOf="@+id/data_text"
+            app:layout_constraintTop_toBottomOf="@+id/data_text" />
+
+        <ImageView
+            android:id="@+id/privacy_management_button"
+            android:src="@drawable/arrow_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/privacy_management_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/privacy_management_text" />
+
+
+        <TextView
+            android:id="@+id/bookmark_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/bookmark_text"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/data_text"
+            app:layout_constraintTop_toBottomOf="@+id/privacy_management_text" />
+
+        <ImageView
+            android:id="@+id/bookmark_button"
+            android:src="@drawable/arrow_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/bookmark_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/bookmark_text" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
