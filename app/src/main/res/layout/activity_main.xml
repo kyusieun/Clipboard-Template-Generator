@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.auto_template.MainActivity"
+    android:orientation="vertical">
+    <com.google.android.material.appbar.CollapsingToolbarLayout
+        android:theme="@style/Base.Theme.Auto_Template"
+        android:id="@+id/myToolbar"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/c1"
+        android:layout_width="match_parent"
+        tools:ignore="MissingConstraints"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/filterBtn"
+            android:layout_weight="0"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/c1"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_action_name"
+            />
+        <TextView
+            android:layout_weight="3"
+            android:id="@+id/currentPageTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Template"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            />
+        <ImageButton
+            android:id="@+id/searchBtn"
+            android:layout_gravity="right"
+            android:layout_weight="0"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/c1"
+            android:src="@drawable/ic_search_button"
+            android:layout_marginRight="10dp"
+            />
+        </LinearLayout>
+
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
+    <RelativeLayout
+        android:id="@+id/history_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#FFF3F3F4">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            />
+<!--            android:background="@drawable/ic_launcher_background"-->
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="25dp"
+            android:id="@+id/addFab"
+            android:src="@drawable/baseline_add_24"
+            app:fabSize="normal"
+            app:backgroundTint="@color/c2"
+
+            />
+    </RelativeLayout>
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="vertical">-->
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_weight="2"-->
+<!--        android:background="@drawable/ic_launcher_background">-->
+
+
+<!--    </androidx.recyclerview.widget.RecyclerView>-->
+
+
+<!--    </LinearLayout>-->
+
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/fab"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="end|bottom"-->
+<!--        android:layout_margin="24dp" />-->
+    <!--디자인상에서만 정상적으로 미출력인 경우일 수 있음
+     https://hyogeun-android.tistory.com/entry/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EA%B0%95%EC%9D%98-10-RecyclerView%EC%99%80-Floating-Action-Button
+     -->
+</LinearLayout>
+
+
+
