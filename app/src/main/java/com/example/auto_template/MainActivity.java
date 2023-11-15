@@ -6,12 +6,14 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
+import android.window.OnBackInvokedDispatcher;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.company.auto_template.R;
 import com.company.auto_template.databinding.ActivityMainBinding;
+import com.google.android.material.search.SearchView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,12 +45,22 @@ public class MainActivity extends AppCompatActivity {
         binding.filterBtn.setOnClickListener(view -> {
             showPopup(this.findViewById(R.id.myToolbar));
         });
+        binding.searchBtn.setOnClickListener(view -> {
+            binding.searchView.setVisibility(View.VISIBLE);
+        });
         setContentView(binding.getRoot());
     }
+
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.sort_menu, popup.getMenu());
         popup.show();
+    }
+    @Override
+    public void onBackPressed(){
+        SearchView searchView = findViewById(R.id.searchView);
+        searchView.setVisibility(searchView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        super.onBackPressed();
     }
 }
