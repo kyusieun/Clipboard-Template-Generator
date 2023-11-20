@@ -18,9 +18,10 @@ import com.google.android.material.search.SearchView;
 
 public class MainActivity extends AppCompatActivity {
     String titles[] = {"안녕하세요", "Hello", "제목1", "제목2", "제목3"};
-    String mains[] = {"안녕하세요", "Hello", "본몬1", "본문2", "본문3"};
+    String mains[] = {"안녕하세요. [고객명]님, 구매하신 상품에 대한 추가 정보를 [날짜]까지 회신하여 주시면, 추가 조치를 해드리겠습니다. 추가 문의 사항이 있으시다면 [주소]로 방문하여......",
+            "Hello", "본몬1", "본문2", "본문3",};
 
-    MyAdapter myAdapter = new MyAdapter();
+    MyAdapter myAdapter = new MyAdapter(this);
     public void makeData(){
         for(int i = 0; i<5; i++) {
             Template item = new Template(titles[i], mains[i]);

@@ -1,5 +1,11 @@
 package com.example.auto_template;
 
+import static androidx.core.content.ContextCompat.startActivity;
+import static androidx.core.content.ContextCompat.startForegroundService;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,10 +27,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
 {
     List<Template> items = new ArrayList<>();
     TemplateRecyclerBinding binding;
-
+    Context context;
+    Intent toTemplateEditorIntent;
+    public MyAdapter(Context context){this.context = context;}
     public void add(Template data){
         items.add(data);
-        //Log.d("debug",data.title);
         notifyDataSetChanged();
     }
     @NonNull
@@ -33,14 +40,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
         Log.d("viewholder", "oncreateView");
         binding = TemplateRecyclerBinding.inflate(LayoutInflater.from(parent.getContext()));
         return new ViewHolder(binding);
-        //View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.template_recycler, parent, false);
-        //return new ViewHolder(view);
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setData(items.get(position));
-        Log.d("debug33", items.get(position).title);
+        //클릭 시마다 인텐트를 생성하도록 하는게 맞을 수는 있지만 보류
+        toTemplateEditorIntent = new Intent(context, TemplateEditor.class);
+        binding.recyclerEditBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               startActivity(context, toTemplateEditorIntent, new Bundle());
+//                Toast.makeText(itemView.getContext(),binding.recyclerTitle.getText(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -66,25 +80,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         private TemplateRecyclerBinding binding;
+
         public ViewHolder(TemplateRecyclerBinding binding){
-            super(binding.getRoot()); //MyAdapter가 아니라 ViewHolder의 생성자 호출
+            super(binding.getRoot());
+            //MyAdapter가 아니라 ViewHolder의 생성자 호출
             //원래 View를 전달하는 거였음.
            this.binding = binding;
         }
-     //   public ViewHolder(View itemView){
-    //        super(itemView);
-   //         TextView title = (TextView) itemView.findViewById(R.id.recycler_title);
-    //        TextView main = (TextView) itemView.findViewById(R.id.recycler_main);
-   //     }
         public void setData(Template data){
             binding.recyclerTitle.setText(data.title);
             binding.recyclerMain.setText(data.main);
-            binding.recyclerEditBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(itemView.getContext(),binding.recyclerTitle.getText(), Toast.LENGTH_SHORT).show();
-                }
-            });
         }
     }
 

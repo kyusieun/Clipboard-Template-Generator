@@ -11,7 +11,8 @@ import com.company.auto_template.databinding.ActivityLoginBinding;
 public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        //현재 MainActivity으로 이동
         Intent toLoginIntent = new Intent(this, MainActivity.class);
         binding.startLoginBtn.setOnClickListener(view -> {
             startActivity(toLoginIntent);
