@@ -56,6 +56,10 @@ public class LoginActivity extends AppCompatActivity {
         Intent signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
+                // 로고 설정
+                .setLogo(R.drawable.logomainmainpage)
+                // 테마 설정
+                .setTheme(R.style.Base_Theme_Auto_Template)
                 .build();
         signInLauncher.launch(signInIntent);
         // [END auth_fui_create_intent]
