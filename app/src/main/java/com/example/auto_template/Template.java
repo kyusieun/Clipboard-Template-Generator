@@ -1,6 +1,9 @@
 package com.example.auto_template;
 
-public class Template{
+import java.io.Serializable;
+
+public class Template implements Serializable {
+
 //{
 //  "data" : [
 //   {
@@ -24,10 +27,12 @@ public class Template{
 // // 등등
 //  ]
 //}
-   String title;
-   String main;
-   public Template(String title, String main){
-      this.title = title;
-      this.main = main;
+   String template_name;
+   String template_content;
+
+
+   public Template(String template_name, String main){
+      this.template_name = template_name;
+      this.template_content = main;
    }
 }

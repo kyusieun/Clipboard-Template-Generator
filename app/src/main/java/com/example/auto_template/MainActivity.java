@@ -1,15 +1,20 @@
 package com.example.auto_template;
 
 import android.app.Activity;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 import android.window.OnBackInvokedDispatcher;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.company.auto_template.R;
 import com.company.auto_template.databinding.ActivityMainBinding;
@@ -33,10 +38,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false);
+        binding.recyclerView.setLayoutManager(linearLayoutManager);
+        binding.recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                int itemView = (int)(parent.getWidth()*0.9);
+                int parentView = parent.getWidth();
+                int margin = (parentView - itemView)/2;
 
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
+                //실행하자마자 0됨. 절대 길이가 설정되기 전, 에 호출되어 버려서 그런듯
+                Log.d("debug33", String.format("%d %d", itemView, parentView));
+                outRect.set(margin, 0, margin, 0);
+            }
+        });
         binding.recyclerView.setAdapter(myAdapter);
+
         //샘플 데이터 적용
         makeData();
 
