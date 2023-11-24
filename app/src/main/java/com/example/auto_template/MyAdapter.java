@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.company.auto_template.databinding.TemplateRecyclerBinding;
+import com.example.auto_template.databinding.TemplateRecyclerBinding;
 
 
 import java.util.ArrayList;

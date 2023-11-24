@@ -16,8 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.company.auto_template.R;
-import com.company.auto_template.databinding.ActivityMainBinding;
+import com.example.auto_template.R;
+import com.example.auto_template.databinding.ActivityMainBinding;
 import com.google.android.material.search.SearchView;
 
 
