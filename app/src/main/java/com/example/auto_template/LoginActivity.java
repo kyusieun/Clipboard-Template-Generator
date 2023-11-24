@@ -7,12 +7,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.company.auto_template.R;
-import com.company.auto_template.databinding.ActivityLoginBinding;
+import com.example.auto_template.R;
+import com.example.auto_template.databinding.ActivityLoginBinding;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
+import com.firebase.ui.auth.FirebaseUiException;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -78,8 +80,14 @@ public class LoginActivity extends AppCompatActivity {
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
-            // 로그인 실패 토스트
-            Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show();
+            if (result.getResultCode() == null){
+                Toast.makeText(this, "로그인이 취소되었습니다.", Toast.LENGTH_SHORT).show();
+            }else
+            {
+                Toast.makeText(this, "로그인 실패" + response.getError(), Toast.LENGTH_SHORT).show();
+                Log.d("LoginActivity", String.valueOf(response.getError()));
+            }
+
         }
     }
     // [END auth_fui_result]
