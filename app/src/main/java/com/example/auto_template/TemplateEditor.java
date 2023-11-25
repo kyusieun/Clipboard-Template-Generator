@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.auto_template.R;
 import com.example.auto_template.databinding.TemplateEditorBinding;
 
 public class TemplateEditor extends AppCompatActivity {

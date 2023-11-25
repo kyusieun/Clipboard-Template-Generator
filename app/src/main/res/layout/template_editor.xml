@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:theme="@style/Base.Theme.Auto_Template"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -33,6 +35,7 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 <LinearLayout
+    style="@style/Base.Theme.Auto_Template"
         android:id="@+id/texteditor_topbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,6 +91,7 @@
         />
 </LinearLayout>
 </LinearLayout>
+
 
 
 

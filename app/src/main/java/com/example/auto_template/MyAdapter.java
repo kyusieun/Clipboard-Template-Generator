@@ -4,12 +4,10 @@ import static androidx.core.content.ContextCompat.startActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,9 +26,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
     Context context;
     ViewGroup.LayoutParams itemLp;
     public MyAdapter(Context context){this.context = context;}
-    public void add(Template data){
-        items.add(data);
-        notifyDataSetChanged();
+    public void addItems(ArrayList<Template> inputItems){
+        this.items = inputItems;
+//        notifyDataSetChanged();
+    }
+    public Template getItem(int position){
+        return items.get(position);
+    }
+    public List<Template> getItems(){
+        return items;
     }
     @NonNull
     @Override
