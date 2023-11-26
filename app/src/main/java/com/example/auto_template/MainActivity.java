@@ -15,7 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.auto_template.databinding.ActivityMainBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.search.SearchView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -26,9 +31,17 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
-    String titles[] = {"안녕하세요", "Hello", "제목1", "제목2", "제목3"};
+
+    // Access a Cloud Firestore instance from your Activity
+    String dummy_id = "auto_template@gmail.com";
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    DocumentReference docRef = db.collection("templates").document(dummy_id);
+
+
+
+    String titles[] = {"안녕하세요", "제목1", "제목2"};
     String mains[] = {"안녕하세요. [고객명]님, 구매하신 상품에 대한 추가 정보를 [날짜]까지 회신하여 주시면, 추가 조치를 해드리겠습니다. 추가 문의 사항이 있으시다면 [주소]로 방문하여......",
-            "Hello", "본몬1", "본문2", "본문3",};
+             "본몬1", "본문2",};
     Intent toTemplateEditorIntent;
     Gson gson = new Gson();
     MyAdapter myAdapter = new MyAdapter(this);
@@ -95,6 +108,27 @@ public class MainActivity extends AppCompatActivity {
             binding.searchView.setVisibility(View.VISIBLE);
         });
         setContentView(binding.getRoot());
+        
+        // Firestore에서 data loding 후 LogCat에 출력
+        // document.getData()를 사용해서 변수에 저장 가능
+        // 현재 document.getData() 쿼리의 결과는 아래 주석과 같음
+        // 	{latest_use: 2023년 11월 27일 오전 5시 5분 44초 UTC+9, content: "내용", id: 0, reference: 4, tag: ["tag1", "tag2"], last_edit: 2023년 11월 26일 오전 5시 5분 28초 UTC+9, title: "안녕하세요"}
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("LOGIN", "DocumentSnapshot data: " + document.getData());
+
+                    } else {
+                        Log.d("LOGIN", "No such document");
+                    }
+                } else {
+                    Log.d("LOGIN", "get failed with ", task.getException());
+                }
+            }
+        });
     }
 
     public void showPopup(View v) {
