@@ -59,9 +59,11 @@
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_layout"
-        tools:itemCount="4"
-        tools:listitem="@layout/setting_privacy_management_item_template" />
+        app:layout_constraintTop_toBottomOf="@+id/list_layout"        />
+
+    <!--        tools:itemCount="4"-->
+<!--        tools:listitem="@layout/list_recyler"-->
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
