@@ -31,8 +31,8 @@ public class Template implements Serializable {
    com.google.firebase.Timestamp last_edit;
    com.google.firebase.Timestamp latest_use;
 
-   ArrayList<String> tags;
-   int reference_count = 0;
+   ArrayList<String> tags = null;
+   int reference;
 
    public Template(String input_title, String input_content){
       //template_id = ;
