@@ -27,7 +27,10 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,22 +40,12 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference docRef = db.collection("templates").document(dummy_id);
 
-
-
-    String titles[] = {"안녕하세요", "제목1", "제목2"};
-    String mains[] = {"안녕하세요. [고객명]님, 구매하신 상품에 대한 추가 정보를 [날짜]까지 회신하여 주시면, 추가 조치를 해드리겠습니다. 추가 문의 사항이 있으시다면 [주소]로 방문하여......",
-             "본몬1", "본문2",};
     Intent toTemplateEditorIntent;
     Gson gson = new Gson();
     MyAdapter myAdapter = new MyAdapter(this);
     ArrayList<Template> items = new ArrayList<>();
-    public void makeData(){
-        for(int i = 0; i<5; i++) {
-            Template item = new Template(titles[i], mains[i]);
-            items.add(item);
-        }
-        Log.d("debug79", items.toString());
-    }
+//    ArrayList<Template> items;
+    TypeToken<ArrayList<Template>> collectionType = new TypeToken<ArrayList<Template>>(){};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,25 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 outRect.set(margin, 0, margin, 0);
             }
         });
-        binding.recyclerView.setAdapter(myAdapter);
 
-
-        //샘플 데이터 적용 || 파일 내용물 없으면 초기 샘플데이터 파일에 저장
-        //참고로 리스트 객체의 걸 Gson으로 바꾸면 알파벳 순으로 자동 정렬되므로 주의
-        //순서가 중요하다면 hashmap 사용할 것
-        if(loadJsonFromLocal() == null) {
-            makeData();
-            String tempJsonString = gson.toJson(items);
-            Log.d("debug77", tempJsonString);
-            saveJsonToLocal(tempJsonString);
-        }
-        else {
-            //자바 상에선 제네릭을 디시리얼라이징할 때 다른 방법이 없다고 함.
-            TypeToken<ArrayList<Template>> collectionType = new TypeToken<ArrayList<Template>>(){};
-            items = (ArrayList<Template>) gson.fromJson(loadJsonFromLocal(), collectionType.getType());
-            Log.d("debug78", items.toString());
-        }
-        myAdapter.addItems(items);
 
         binding.addFab.setOnClickListener(view -> {
 //            Log.d("debug66", "클릭리스너실행됨");
@@ -107,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
         binding.searchBtn.setOnClickListener(view -> {
             binding.searchView.setVisibility(View.VISIBLE);
         });
-        setContentView(binding.getRoot());
-        
+
+        Log.d("LOGIN3", loadJsonFromLocal());
         // Firestore에서 data loding 후 LogCat에 출력
         // document.getData()를 사용해서 변수에 저장 가능
         // 현재 document.getData() 쿼리의 결과는 아래 주석과 같음
@@ -119,18 +94,23 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.d("LOGIN", "DocumentSnapshot data: " + document.getData());
-
+                        Log.d("LOGIN", "DocumentSnapshot data: " + document.getData().toString());
+                        Log.d("LOGIN2", document.getData().get("template").getClass().toString());
+                        Log.d("LOGINB", items.toString());
+                        items = parseMapToTemplateCollection(document.getData());
+                        Log.d("LOGINA", items.toString());
                     } else {
                         Log.d("LOGIN", "No such document");
                     }
                 } else {
                     Log.d("LOGIN", "get failed with ", task.getException());
                 }
+                myAdapter.addItems(items);
+                binding.recyclerView.setAdapter(myAdapter);
             }
         });
+        setContentView(binding.getRoot());
     }
-
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -163,6 +143,19 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return myData;
+    }
+    private ArrayList<Template> parseMapToTemplateCollection(Map<String, Object> map){
+        Template tempTemp;
+        ArrayList<Template> tempList = new ArrayList<>();
+        //데이터 여러개일 때의 처리는 while로. 현재는 형식을 모르겠음
+        //while(){
+        Map<String, Object> map2 = (Map<String, Object>) map.get("template");
+        //tempTemp = new Template();
+        tempTemp = gson.fromJson(gson.toJson(map2), Template.class);
+        //}
+        tempList.add(tempTemp);
+
+        return tempList;
     }
     /*
     1. gson 라이브러리 사용
