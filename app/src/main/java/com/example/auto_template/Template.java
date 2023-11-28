@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Template implements Serializable {
 
@@ -25,8 +26,11 @@ public class Template implements Serializable {
    String template_name;
    String template_content;
    String creation_date;
-   String last_edit;
-   String latest_use;
+//   String last_edit;
+//   String latest_use;
+   com.google.firebase.Timestamp last_edit;
+   com.google.firebase.Timestamp latest_use;
+
    ArrayList<String> tags;
    int reference_count = 0;
 
@@ -35,17 +39,18 @@ public class Template implements Serializable {
       LocalDateTime tempTime = LocalDateTime.now();
       template_name = input_title;
       template_content = input_content;
-      creation_date = tempTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
-      last_edit = tempTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+//      creation_date = tempTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+//      last_edit = tempTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
       tags = new ArrayList<>();
+
    }
    public Template(){
       //template_id = ;
       LocalDateTime tempTime = LocalDateTime.now();
       this.template_name = "빈 템플릿";
       this.template_content = "text";
-      creation_date = tempTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
-      last_edit = tempTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+//      creation_date = tempTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+//      last_edit = tempTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
       tags = new ArrayList<>();
    }
 }

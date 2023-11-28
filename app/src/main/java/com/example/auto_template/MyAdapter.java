@@ -4,6 +4,7 @@ import static androidx.core.content.ContextCompat.startActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,19 +22,20 @@ import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
 {
-    List<Template> items = new ArrayList<>();
+    ArrayList<Template> items = new ArrayList<>();
     TemplateRecyclerBinding binding;
     Context context;
     ViewGroup.LayoutParams itemLp;
     public MyAdapter(Context context){this.context = context;}
     public void addItems(ArrayList<Template> inputItems){
         this.items = inputItems;
-//        notifyDataSetChanged();
+        Log.d("LOGIN1", items.toString());
+        notifyDataSetChanged();
     }
     public Template getItem(int position){
         return items.get(position);
     }
-    public List<Template> getItems(){
+    public ArrayList<Template> getItems(){
         return items;
     }
     @NonNull
@@ -50,6 +52,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setData(items.get(position));
+        Log.d("LOGINBB", items.get(position).toString());
     }
 
     @Override
@@ -92,7 +95,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
 //                Toast.makeText(itemView.getContext(),binding.recyclerTitle.getText(), Toast.LENGTH_SHORT).show();
                 }
             });
-
         }
         public void setData(Template data){
             currentData = data;
