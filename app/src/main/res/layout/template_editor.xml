@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:theme="@style/Base.Theme.Auto_Template"
+<androidx.constraintlayout.widget.ConstraintLayout android:theme="@style/Base.Theme.Auto_Template"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,6 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
+
     <androidx.appcompat.widget.Toolbar
         android:theme="@style/Base.Theme.Auto_Template"
         android:id="@+id/toolbar"
@@ -18,10 +18,11 @@
         app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
         >
         <ImageButton
+            tools:ignore="SpeakableTextPresentCheck"
             android:id="@+id/btn_template_editor_exit"
             android:background="@color/c1"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:scaleType="fitCenter"
             android:src="@drawable/back_icon" />
         <TextView
@@ -29,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="template editor"
+            android:text="@string/template_edior"
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -39,30 +40,14 @@
         android:id="@+id/texteditor_topbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/c4">
+        android:background="@color/c4"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/btn_bookmark_keyword"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:src="@drawable/bookmark_keyword"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                />
-            <ImageView
-                android:id="@+id/btn_list_keyword"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:src="@drawable/list_keyword"
 
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                />
+
             <ImageView
                 android:id="@+id/btn_text_keyword"
                 android:layout_width="18dp"
@@ -72,25 +57,37 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="16dp"
                 />
+
+            <ImageView
+                android:id="@+id/btn_clock_keyword"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_clock"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                />
         </LinearLayout>
-</LinearLayout>>
+</LinearLayout>
 <LinearLayout
         android:id="@+id/set_account_view"
         android:layout_width="match_parent"
         android:layout_height="600dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/view_round_color4">
-    <EditText
+        android:background="@drawable/view_round_color4"
+        app:layout_constraintTop_toBottomOf="@id/texteditor_topbar_view">
+    <TextView
         android:id="@+id/template_editor_editText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="top"
-        android:text="samptext"
+        android:text="@string/template"
         android:textSize="20sp"
         android:padding="8dp"
         />
 </LinearLayout>
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

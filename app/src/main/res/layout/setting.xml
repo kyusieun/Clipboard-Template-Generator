@@ -81,7 +81,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
             android:text="@string/set_account_text"
-            android:textColor="#ADADAD"
+            android:textColor="@color/gray_600"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -104,9 +104,7 @@
             android:layout_height="16dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/set_profile_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/set_profile_text" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
         <TextView
@@ -127,9 +125,7 @@
             android:layout_height="16dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/set_password_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/set_password_text" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -156,7 +152,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:text="@string/accessibility"
-            android:textColor="#ADADAD"
+            android:textColor="@color/gray_600"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -172,14 +168,13 @@
             app:layout_constraintStart_toStartOf="@+id/accessibility"
             app:layout_constraintTop_toBottomOf="@+id/accessibility" />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/floating_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toOf="parent"
             app:layout_constraintTop_toTopOf="@+id/floating_Text"
-            tools:layout_editor_absoluteY="43dp" />
+            />
 
 
 
@@ -195,14 +190,13 @@
             app:layout_constraintTop_toBottomOf="@+id/floating_Text" />
 
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/top_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toOf="parent"
             app:layout_constraintTop_toTopOf="@+id/top_display_text"
-            tools:layout_editor_absoluteY="43dp" />
+             />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -228,7 +222,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
             android:text="@string/data_text"
-            android:textColor="#ADADAD"
+            android:textColor="@color/gray_600"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -252,8 +246,7 @@
             android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/privacy_management_text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/privacy_management_text" />
+ />
 
 
         <TextView
@@ -274,9 +267,7 @@
             android:layout_height="16dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/bookmark_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/bookmark_text" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

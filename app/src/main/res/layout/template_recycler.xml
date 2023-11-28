@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:theme="@style/Base.Theme.Auto_Template"
+<LinearLayout android:theme="@style/Base.Theme.Auto_Template"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/recycler_cardView"
@@ -31,38 +31,42 @@
                     android:id="@+id/recycler_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left|center"
-                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="start|center"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:text="템플릿 이름" />
+                    android:text="템플릿 이름"
+                    android:textColor="@color/black"/>
 
                 <ImageButton
+                    tools:ignore="SpeakableTextPresentCheck"
                     android:id="@+id/recycler_editBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center"
-                    android:layout_weight="6"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="0"
                     android:layout_marginTop="1dp"
                     android:background="@color/c1"
-                    android:src="@drawable/ic_edit_button" />
+                    android:src="@drawable/icon_edit"
+                    />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/recycler_main"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="7dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="7dp"
                 android:text="동해물과 백두산이 마르고 닳도록" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="15dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="15dp"
                 android:layout_marginBottom="10dp"
-                android:text="7d ago"/>
+                android:text="7d ago"
+                android:textColor="@color/gray_600"/>
         </LinearLayout>
 
 
