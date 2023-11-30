@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import com.google.firebase.Timestamp;
 
 import com.example.auto_template.databinding.TemplateEditorBinding;
+
+import java.sql.Time;
+import java.util.ArrayList;
 
 public class TemplateEditor extends AppCompatActivity {
     TemplateEditorBinding binding;
@@ -17,13 +21,12 @@ public class TemplateEditor extends AppCompatActivity {
         binding = TemplateEditorBinding.inflate(getLayoutInflater());
         Log.d("editor","안 잔다");
         fromMainIntent = getIntent();
+        binding.templateEditorTitle.setText(fromMainIntent.getStringExtra("current_title"));
+        binding.templateEditorEditText.setText(fromMainIntent.getStringExtra("current_content"));
 
-        Template item = fromMainIntent.getSerializableExtra("template_item", Template.class);
-        Log.d("LoginBBB", item.toString());
-        binding.templateEditorTitle.setText(item.template_name);
-        binding.templateEditorEditText.setText(item.template_content);
-        toMainIntent = new Intent(this, MainActivity.class);
+
         binding.btnTemplateEditorExit.setOnClickListener(view ->{
+            toMainIntent = new Intent(this, MainActivity.class);
             startActivity(toMainIntent);
         });
         super.onCreate(savedInstanceState);

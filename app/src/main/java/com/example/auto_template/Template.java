@@ -2,15 +2,23 @@ package com.example.auto_template;
 
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.Timestamp;
+
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.sql.Time;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
+
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
-public class Template implements Serializable {
-
+public class Template implements Serializable, Parcelable {
+   public Template(){}
 //  {
 //    "id": "고유넘버",
 //    "template_name": "제목",
@@ -22,35 +30,84 @@ public class Template implements Serializable {
 //    "creation_date:"최초 생성일"
 //  },
 //
-   String template_id;
-   String template_name;
-   String template_content;
-   String creation_date;
-//   String last_edit;
-//   String latest_use;
-   com.google.firebase.Timestamp last_edit;
-   com.google.firebase.Timestamp latest_use;
+   String title = null;
+   String content = null;
+   Timestamp last_edit = null;
+   Timestamp latest_use = null;
 
-   ArrayList<String> tags = null;
-   int reference;
+   ArrayList<String> tag = null;
+   long reference = 0;
+   String id = null;
+   public Template(String id){
+      this.id = id;
+   }
 
-   public Template(String input_title, String input_content){
-      //template_id = ;
-      LocalDateTime tempTime = LocalDateTime.now();
-      template_name = input_title;
-      template_content = input_content;
-//      creation_date = tempTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
-//      last_edit = tempTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
-      tags = new ArrayList<>();
+   @NonNull
+   @Override
+   public String toString() {
+      return "id : "+id+", reference :" + String.valueOf(reference) + ", last_edit : " + last_edit.toString() + ", tag :" + tag.toString() +
+              ", latest_use : " + latest_use.toString() + ", title: " + title + ", content : " + content;
+   }
+
+   @Override
+   public int describeContents() {
+      return 0;
+   }
+
+   @Override
+   public void writeToParcel(@NonNull Parcel parcel, int i) {
+      parcel.writeString(title);
+      parcel.writeString(content);
+      parcel.writeLong(reference);
+      parcel.writeParcelable(last_edit, 1);
+      parcel.writeParcelable(latest_use, 2);
+      parcel.writeList(tag);
 
    }
-   public Template(){
-      //template_id = ;
-      LocalDateTime tempTime = LocalDateTime.now();
-      this.template_name = "빈 템플릿";
-      this.template_content = "text";
-//      creation_date = tempTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
-//      last_edit = tempTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
-      tags = new ArrayList<>();
+   public static final Parcelable.Creator<Template> CREATOR
+           = new Parcelable.Creator<Template>() {
+      public Template createFromParcel(Parcel in) {
+         return new Template(in);
+      }
+
+      @Override
+      public Template[] newArray(int i) {
+         return new Template[i];
+      }
+   };
+   public Template(Parcel in){
+      title = in.readString();
+      content = in.readString();
+      reference = in.readInt();
+      last_edit = in.readParcelable(null);
+      latest_use = in.readParcelable(null);
+      tag = in.readArrayList(ArrayList.class.getClassLoader(), String.class);
+   }
+
+   public String getTitle() {
+      return title;
+   }
+   public long getReference() {
+      return reference;
+   }
+
+   public ArrayList<String> getTag() {
+      return tag;
+   }
+
+   public String getContent() {
+      return content;
+   }
+
+   public String getId() {
+      return id;
+   }
+
+   public Timestamp getLast_edit() {
+      return last_edit;
+   }
+
+   public Timestamp getLatest_use() {
+      return latest_use;
    }
 }

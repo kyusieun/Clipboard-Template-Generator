@@ -18,18 +18,16 @@ import com.example.auto_template.databinding.TemplateRecyclerBinding;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
 {
-    ArrayList<Template> items = new ArrayList<>();
+    ArrayList<Template> items;
     TemplateRecyclerBinding binding;
     Context context;
     ViewGroup.LayoutParams itemLp;
     public MyAdapter(Context context){this.context = context;}
     public void addItems(ArrayList<Template> inputItems){
         this.items = inputItems;
-        Log.d("LOGIN1", items.toString());
         notifyDataSetChanged();
     }
     public Template getItem(int position){
@@ -47,14 +45,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
         binding.recyclerCardView.setLayoutParams(itemLp);
         return new ViewHolder(binding, context);
     }
-
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setData(items.get(position));
-        Log.d("LOGINBB", items.get(position).toString());
+        //Log.d("LOGINBB", String.valueOf(items.get(position).hashCode()));
     }
-
     @Override
     public int getItemCount() {
         return items.size();
@@ -80,26 +75,28 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
     private TemplateRecyclerBinding binding;
         Intent toTemplateEditorIntent;
         Template currentData;
-
         public ViewHolder(TemplateRecyclerBinding binding, Context context){
             super(binding.getRoot());
-            //MyAdapter가 아니라 ViewHolder의 생성자 호출
-            //원래 View를 전달하는 거였음.
-           this.binding = binding;
+            this.binding = binding;
             binding.recyclerEditBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     toTemplateEditorIntent = new Intent(context, TemplateEditor.class);
-                    toTemplateEditorIntent.putExtra("template_item", currentData);
+                    toTemplateEditorIntent
+                            .putExtra("current_title", currentData.title)
+                            .putExtra("current_content", currentData.content);
                     startActivity(context, toTemplateEditorIntent, null);
-//                Toast.makeText(itemView.getContext(),binding.recyclerTitle.getText(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
         public void setData(Template data){
             currentData = data;
-            binding.recyclerTitle.setText(currentData.template_name);
-            binding.recyclerMain.setText(currentData.template_content);
+            binding.recyclerTitle.setText(currentData.title);
+            binding.recyclerMain.setText(currentData.content);
+            binding.recyclerLastEditText.setText(currentData.last_edit.toDate().toString());
+        }
+        private String getClasses(){
+            return currentData.title.getClass().toString();
         }
     }
 

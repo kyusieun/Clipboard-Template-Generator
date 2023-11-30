@@ -1,7 +1,5 @@
 package com.example.auto_template;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -9,7 +7,7 @@ import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.PopupMenu;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +22,8 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -31,30 +31,23 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
 
     // Access a Cloud Firestore instance from your Activity
-    String dummy_id = "auto_template@gmail.com";
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    DocumentReference docRef = db.collection("templates").document(dummy_id);
 
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     Intent toTemplateEditorIntent;
     Gson gson = new Gson();
     MyAdapter myAdapter = new MyAdapter(this);
-    ArrayList<Template> items = new ArrayList<>();
-//    ArrayList<Template> items;
-    TypeToken<ArrayList<Template>> collectionType = new TypeToken<ArrayList<Template>>(){};
-
+    ArrayList<Template> items = new ArrayList<Template>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +60,6 @@ public class MainActivity extends AppCompatActivity {
                 int itemView = (int)(parent.getWidth()*0.9);
                 int parentView = parent.getWidth();
                 int margin = (parentView - itemView)/2;
-
-                //실행하자마자 0됨. 절대 길이가 설정되기 전, 에 호출되어 버려서 그런듯
-                Log.d("debug33", String.format("%d %d", itemView, parentView));
                 outRect.set(margin, 0, margin, 0);
             }
         });
@@ -82,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 ////            toTemplateEditorIntent.putExtra("template_item", myAdapter.get(myAdapter.getItemCount()));
 //            toTemplateEditorIntent = new Intent(this, TemplateEditor.class);
 //            startActivity(toTemplateEditorIntent);
-//            Toast.makeText(this, "add", Toast.LENGTH_SHORT).show();
         });
         binding.filterBtn.setOnClickListener(view -> {
             showPopup(this.findViewById(R.id.myToolbar));
@@ -134,41 +123,36 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
-
-
-
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        // "template" 필드를 Map으로 가져옴
-                        Map<String, Object> templateMap = (Map<String, Object>) document.get("template");
-
-                        if (templateMap != null) {
-                            // "content" 필드를 가져옴
-                            String content = (String) templateMap.get("content");
-                            Log.d("FireStore", "content: " + content);
-                            // content를 사용하여 원하는 작업 수행
-                            // 예: TextView에 content를 설정
-                            // textView.setText(content);
+        db.collection("user1").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    Template tempTemp;
+                    @Override
+                    public void onComplete( Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            // QuerySnapshot으로부터 문서 목록을 얻음
+                            QuerySnapshot querySnapshot = task.getResult();
+                            if (querySnapshot != null) {
+                                // 각 문서에 대한 반복
+                                for (QueryDocumentSnapshot document : querySnapshot) {
+                                    // 문서 ID 가져오기
+                                    //items.add(new Template(document.getId()));
+                                    Log.d("Firestore", "Document ID: " + document.getId());
+                                    // 문서 데이터 가져오기 + ArrayList<Template> 인 items에 추가
+                                    tempTemp = document.toObject(Template.class);
+                                    items.add(tempTemp);
+                                    Log.d("Firestore", tempTemp.toString());
+                                }
+                            } else {
+                                Log.d("Firestore", "No documents found in the collection.");
+                            }
                         } else {
-                            // "template" 필드가 없는 경우 처리
+                            Log.w("Firestore", "Error getting documents.", task.getException());
                         }
-                        Log.d("FireStore", "DocumentSnapshot data: " + document.getData().toString());
-
-                        items = parseMapToTemplateCollection(document.getData());
-                    } else {
-                        Log.d("FireStore", "No such document");
+                        //어댑터에 데이터 연결. 위치를 옮기면 오류
+                    myAdapter.addItems(items);
+                    binding.recyclerView.setAdapter(myAdapter);
                     }
-                } else {
-                    Log.d("FireStore", "get failed with ", task.getException());
-                }
-                myAdapter.addItems(items);
-                binding.recyclerView.setAdapter(myAdapter);
-            }
-        });
+                });
         setContentView(binding.getRoot());
     }
     public void showPopup(View v) {
@@ -183,43 +167,4 @@ public class MainActivity extends AppCompatActivity {
         searchView.setVisibility(searchView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
         super.onBackPressed();
     }
-    private void saveJsonToLocal(String jsonString){
-        //일단은 앱 설치 후 첫 실행할 때만 해당 메소드 호출되도록 하는게 목표(튜토리얼 역할 정도)
-        try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(this.openFileOutput("MyDataFile", this.MODE_PRIVATE));
-            objectOutputStream.writeObject(jsonString);
-            objectOutputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    private String loadJsonFromLocal(){
-        String myData = null;
-        try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(this.openFileInput("MyDataFile"));
-            myData = (String) objectInputStream.readObject();
-            objectInputStream.close();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return myData;
-    }
-    private ArrayList<Template> parseMapToTemplateCollection(Map<String, Object> map){
-        Template tempTemp;
-        ArrayList<Template> tempList = new ArrayList<>();
-        //데이터 여러개일 때의 처리는 while로. 현재는 형식을 모르겠음
-        //while(){
-        Map<String, Object> map2 = (Map<String, Object>) map.get("template");
-        //tempTemp = new Template();
-        tempTemp = gson.fromJson(gson.toJson(map2), Template.class);
-        //}
-        tempList.add(tempTemp);
-
-        return tempList;
-    }
-    /*
-    1. gson 라이브러리 사용
-    2. 일단 이니셜때는 파일에 기본적인 템플릿들을 json String으로 저장
-    3. onCreate 혹은 onResume 시에 파일에서 로딩해야 함. 일단은 onCreate만 생각
-     */
 }
