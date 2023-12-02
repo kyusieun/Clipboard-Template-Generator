@@ -82,9 +82,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     toTemplateEditorIntent = new Intent(context, TemplateEditor.class);
-                    toTemplateEditorIntent
-                            .putExtra("current_title", currentData.title)
-                            .putExtra("current_content", currentData.content);
+                    toTemplateEditorIntent.putExtra("current_template", currentData);
+//                            .putExtra("current_title", currentData.title)
+//                            .putExtra("current_content", currentData.content);
                     startActivity(context, toTemplateEditorIntent, null);
                 }
             });
@@ -93,7 +93,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
             currentData = data;
             binding.recyclerTitle.setText(currentData.title);
             binding.recyclerMain.setText(currentData.content);
-            binding.recyclerLastEditText.setText(currentData.last_edit.toDate().toString());
+//            binding.recyclerLastEditText.setText(currentData.last_edit.toDate().toString());
         }
         private String getClasses(){
             return currentData.title.getClass().toString();

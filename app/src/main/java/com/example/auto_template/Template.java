@@ -4,6 +4,7 @@ package com.example.auto_template;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -15,9 +16,10 @@ import java.sql.Time;
 import java.time.LocalDateTime;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class Template implements Serializable, Parcelable {
+public class Template implements Parcelable {
    public Template(){}
 //  {
 //    "id": "고유넘버",
@@ -30,10 +32,10 @@ public class Template implements Serializable, Parcelable {
 //    "creation_date:"최초 생성일"
 //  },
 //
-   String title = null;
+   String title;
    String content = null;
-   Timestamp last_edit = null;
-   Timestamp latest_use = null;
+   Date last_edit = null;
+   Date latest_use = null;
 
    ArrayList<String> tag = null;
    long reference = 0;
@@ -45,7 +47,7 @@ public class Template implements Serializable, Parcelable {
    @NonNull
    @Override
    public String toString() {
-      return "id : "+id+", reference :" + String.valueOf(reference) + ", last_edit : " + last_edit.toString() + ", tag :" + tag.toString() +
+      return "reference :" + String.valueOf(reference) + ", last_edit : " + last_edit.toString() + ", tag :" + tag.toString() +
               ", latest_use : " + latest_use.toString() + ", title: " + title + ", content : " + content;
    }
 
@@ -59,8 +61,8 @@ public class Template implements Serializable, Parcelable {
       parcel.writeString(title);
       parcel.writeString(content);
       parcel.writeLong(reference);
-      parcel.writeParcelable(last_edit, 1);
-      parcel.writeParcelable(latest_use, 2);
+      parcel.writeString(last_edit.toString());
+      parcel.writeString(latest_use.toString());
       parcel.writeList(tag);
 
    }
@@ -78,9 +80,10 @@ public class Template implements Serializable, Parcelable {
    public Template(Parcel in){
       title = in.readString();
       content = in.readString();
-      reference = in.readInt();
-      last_edit = in.readParcelable(null);
-      latest_use = in.readParcelable(null);
+      reference = in.readLong();
+      Log.d("test", in.readString());
+//      last_edit.setTime(Date.parse(in.readString()));
+//      latest_use.setTime(Date.parse(in.readString()));
       tag = in.readArrayList(ArrayList.class.getClassLoader(), String.class);
    }
 
@@ -103,11 +106,11 @@ public class Template implements Serializable, Parcelable {
       return id;
    }
 
-   public Timestamp getLast_edit() {
+   public Date getLast_edit() {
       return last_edit;
    }
 
-   public Timestamp getLatest_use() {
+   public Date getLatest_use() {
       return latest_use;
    }
 }

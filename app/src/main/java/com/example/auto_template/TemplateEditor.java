@@ -21,8 +21,10 @@ public class TemplateEditor extends AppCompatActivity {
         binding = TemplateEditorBinding.inflate(getLayoutInflater());
         Log.d("editor","안 잔다");
         fromMainIntent = getIntent();
-        binding.templateEditorTitle.setText(fromMainIntent.getStringExtra("current_title"));
-        binding.templateEditorEditText.setText(fromMainIntent.getStringExtra("current_content"));
+        Template tempTemp = fromMainIntent.getParcelableExtra("current_template", Template.class);
+        Log.d("test", tempTemp.latest_use.toString());
+//        binding.templateEditorTitle.setText(fromMainIntent.getStringExtra("current_title"));
+//        binding.templateEditorEditText.setText(fromMainIntent.getStringExtra("current_content"));
 
 
         binding.btnTemplateEditorExit.setOnClickListener(view ->{

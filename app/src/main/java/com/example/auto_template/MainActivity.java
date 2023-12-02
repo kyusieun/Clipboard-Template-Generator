@@ -138,7 +138,16 @@ public class MainActivity extends AppCompatActivity {
                                     //items.add(new Template(document.getId()));
                                     Log.d("Firestore", "Document ID: " + document.getId());
                                     // 문서 데이터 가져오기 + ArrayList<Template> 인 items에 추가
-                                    tempTemp = document.toObject(Template.class);
+//                                    tempTemp = document.toObject(Template.class);
+                                    Log.d("firestore", document.get("title", String.class));
+                                    tempTemp = new Template();
+                                    tempTemp.title = (String)document.get("title");
+                                    tempTemp.content = document.get("content", String.class);
+                                    tempTemp.last_edit = document.get("last_edit", Date.class);
+                                    Log.d("firestore", document.get("last_edit", Date.class).toString());
+                                    tempTemp.latest_use = ((Timestamp)document.get("latest_use")).toDate();
+                                    tempTemp.tag = (ArrayList<String>)document.get("tag");
+                                    tempTemp.reference = (long) document.get("reference");
                                     items.add(tempTemp);
                                     Log.d("Firestore", tempTemp.toString());
                                 }

@@ -76,7 +76,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/view_round_color4"
         app:layout_constraintTop_toBottomOf="@id/texteditor_topbar_view">
-    <TextView
+    <EditText
         android:id="@+id/template_editor_editText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
