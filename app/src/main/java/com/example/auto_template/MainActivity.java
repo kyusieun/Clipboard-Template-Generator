@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     Gson gson = new Gson();
     MyAdapter myAdapter = new MyAdapter(this);
     ArrayList<Template> items = new ArrayList<Template>();
+    Template tempTemp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         }
         db.collection("user1").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    Template tempTemp;
+
                     @Override
                     public void onComplete( Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
@@ -138,18 +139,9 @@ public class MainActivity extends AppCompatActivity {
                                     //items.add(new Template(document.getId()));
                                     Log.d("Firestore", "Document ID: " + document.getId());
                                     // 문서 데이터 가져오기 + ArrayList<Template> 인 items에 추가
-//                                    tempTemp = document.toObject(Template.class);
-                                    Log.d("firestore", document.get("title", String.class));
-                                    tempTemp = new Template();
-                                    tempTemp.title = (String)document.get("title");
-                                    tempTemp.content = document.get("content", String.class);
-                                    tempTemp.last_edit = document.get("last_edit", Date.class);
-                                    Log.d("firestore", document.get("last_edit", Date.class).toString());
-                                    tempTemp.latest_use = ((Timestamp)document.get("latest_use")).toDate();
-                                    tempTemp.tag = (ArrayList<String>)document.get("tag");
-                                    tempTemp.reference = (long) document.get("reference");
-                                    items.add(tempTemp);
+                                    tempTemp = document.toObject(Template.class);
                                     Log.d("Firestore", tempTemp.toString());
+                                    items.add(tempTemp);
                                 }
                             } else {
                                 Log.d("Firestore", "No documents found in the collection.");
@@ -164,6 +156,22 @@ public class MainActivity extends AppCompatActivity {
                 });
         setContentView(binding.getRoot());
     }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        tempTemp = intent.getParcelableExtra("changed_template", Template.class);
+        items.set(intent.getIntExtra("changed_item_position", -1), tempTemp);
+        Log.d("fromTemplateEditor", tempTemp.toString());
+        myAdapter.notifyDataSetChanged();
+        super.onNewIntent(intent);
+    }
+
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();

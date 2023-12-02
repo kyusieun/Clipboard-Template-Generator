@@ -34,8 +34,8 @@ public class Template implements Parcelable {
 //
    String title;
    String content = null;
-   Date last_edit = null;
-   Date latest_use = null;
+   Timestamp last_edit = null;
+   Timestamp latest_use = null;
 
    ArrayList<String> tag = null;
    long reference = 0;
@@ -61,8 +61,8 @@ public class Template implements Parcelable {
       parcel.writeString(title);
       parcel.writeString(content);
       parcel.writeLong(reference);
-      parcel.writeString(last_edit.toString());
-      parcel.writeString(latest_use.toString());
+      parcel.writeParcelable(last_edit, i);
+      parcel.writeParcelable(latest_use, i);
       parcel.writeList(tag);
 
    }
@@ -81,9 +81,8 @@ public class Template implements Parcelable {
       title = in.readString();
       content = in.readString();
       reference = in.readLong();
-      Log.d("test", in.readString());
-//      last_edit.setTime(Date.parse(in.readString()));
-//      latest_use.setTime(Date.parse(in.readString()));
+      last_edit = in.readParcelable(Template.class.getClassLoader());
+      latest_use = in.readParcelable(Template.class.getClassLoader());
       tag = in.readArrayList(ArrayList.class.getClassLoader(), String.class);
    }
 
@@ -106,11 +105,11 @@ public class Template implements Parcelable {
       return id;
    }
 
-   public Date getLast_edit() {
+   public Timestamp getLast_edit() {
       return last_edit;
    }
 
-   public Date getLatest_use() {
+   public Timestamp getLatest_use() {
       return latest_use;
    }
 }
