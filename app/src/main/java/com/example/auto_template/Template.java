@@ -39,7 +39,7 @@ public class Template implements Parcelable {
 
    ArrayList<String> tag = null;
    long reference = 0;
-   String id = null;
+   String id = " ";
    public Template(String id){
       this.id = id;
    }
@@ -47,7 +47,7 @@ public class Template implements Parcelable {
    @NonNull
    @Override
    public String toString() {
-      return "reference :" + String.valueOf(reference) + ", last_edit : " + last_edit.toString() + ", tag :" + tag.toString() +
+      return "id : "+id+", reference :" + String.valueOf(reference) + ", last_edit : " + last_edit.toString() + ", tag :" + tag.toString() +
               ", latest_use : " + latest_use.toString() + ", title: " + title + ", content : " + content;
    }
 
@@ -58,6 +58,7 @@ public class Template implements Parcelable {
 
    @Override
    public void writeToParcel(@NonNull Parcel parcel, int i) {
+      parcel.writeString(id);
       parcel.writeString(title);
       parcel.writeString(content);
       parcel.writeLong(reference);
@@ -78,6 +79,7 @@ public class Template implements Parcelable {
       }
    };
    public Template(Parcel in){
+      id = in.readString();
       title = in.readString();
       content = in.readString();
       reference = in.readLong();

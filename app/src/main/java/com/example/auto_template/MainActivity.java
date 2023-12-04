@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                                     Log.d("Firestore", "Document ID: " + document.getId());
                                     // 문서 데이터 가져오기 + ArrayList<Template> 인 items에 추가
                                     tempTemp = document.toObject(Template.class);
+                                    tempTemp.id = document.getId();
                                     Log.d("Firestore", tempTemp.toString());
                                     items.add(tempTemp);
                                 }
