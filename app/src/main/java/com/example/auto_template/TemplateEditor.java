@@ -3,6 +3,7 @@ package com.example.auto_template;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import com.google.firebase.Timestamp;
 
 import com.example.auto_template.databinding.TemplateEditorBinding;
+
+import java.util.Calendar;
 
 public class TemplateEditor extends AppCompatActivity {
     TemplateEditorBinding binding;
@@ -69,7 +72,7 @@ public class TemplateEditor extends AppCompatActivity {
         });
 
         // 날짜 버튼
-        binding.btnClockKeyword.setOnClickListener(view -> {
+        binding.btnClockKeyword.setOnClickListener(view2 -> {
             // Create a dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(TemplateEditor.this);
             LayoutInflater inflater = getLayoutInflater();
@@ -87,7 +90,8 @@ public class TemplateEditor extends AppCompatActivity {
 
             // Set click listener for "Yes" button
             yesButton.setOnClickListener(v -> {
-                String inputText = confirmTextView.getText().toString();
+                String inputText = " ";
+
                 // Handle the input text here
                 // For example, you can insert the text into the editor
                 int cursorPosition = binding.templateEditorEditText.getSelectionStart();
@@ -102,10 +106,6 @@ public class TemplateEditor extends AppCompatActivity {
                 dialog.dismiss();
             });
 
-            dialog.show();
-        });
-
-
         // 저장 버튼 수정 요망
         binding.btnTemplateEditorExit.setOnClickListener(view ->{
             tempTemp.title = binding.templateEditorTitle.getText().toString();
@@ -113,11 +113,13 @@ public class TemplateEditor extends AppCompatActivity {
             tempTemp.last_edit = Timestamp.now();
             toMainIntent = new Intent(this, MainActivity.class);
             toMainIntent.putExtra("changed_template", tempTemp)
-                            .putExtra("changed_item_position", fromMainIntent.getIntExtra("selected_item_position", -1));
+                    .putExtra("changed_item_position", fromMainIntent.getIntExtra("selected_item_position", -1));
 
             startActivity(toMainIntent);
         });
         super.onCreate(savedInstanceState);
         setContentView(binding.getRoot());
+    });
+
     }
 }

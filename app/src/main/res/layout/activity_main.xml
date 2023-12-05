@@ -1,88 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.auto_template.MainActivity"
     android:orientation="vertical">
-    <androidx.appcompat.widget.Toolbar
-        style="@style/Base.Theme.Auto_Template"
-        android:id="@+id/myToolbar"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/c1"
+
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
-        tools:ignore="MissingConstraints"
-        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
-        <androidx.appcompat.widget.SearchView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/searchView"
-            android:background="@color/c3"
-            app:iconifiedByDefault="false"
-            android:visibility="gone"
-            app:queryHint="hint"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:imeOptions="actionDone|actionSearch"
-            />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <ImageButton
-                android:layout_weight="0"
-                android:id="@+id/filterBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@color/c1"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="4dp"
-                android:src="@drawable/icon_sortdown"
-                tools:ignore="SpeakableTextPresentCheck"
-                />
-            <TextView
-                android:layout_weight="3"
-                android:id="@+id/currentPageTextView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/template"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                />
-            <ImageButton
-                android:layout_weight="0"
-                android:id="@+id/searchBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@color/c1"
-                android:src="@drawable/icon_search"
-                android:layout_marginEnd="4dp"
-                android:layout_marginTop="4dp"
-                tools:ignore="SpeakableTextPresentCheck"
-                />
-        </LinearLayout>
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </androidx.recyclerview.widget.RecyclerView>
-
+        android:layout_height="0dp"
+        android:layout_weight="1" />
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:background="@color/white"
             android:id="@+id/bottomNav"
@@ -93,21 +20,4 @@
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_navigation_menu" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_add_24"
-            app:backgroundTint="@color/c2"
-            app:fabSize="normal"
-            app:layout_constraintBottom_toTopOf="@+id/bottomNav"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.900"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.950"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
