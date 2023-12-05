@@ -16,6 +16,9 @@
             android:name="com.example.auto_template.TemplateEditor"
             android:exported="false" />
         <activity
+            android:name="com.example.auto_template.TemplateUse"
+            android:exported="false" />
+        <activity
             android:name="com.example.auto_template.LoginActivity"
             android:exported="true">
 <!--            <intent-filter>-->

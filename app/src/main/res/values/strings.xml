@@ -24,5 +24,5 @@
     <string name="login_failed">"Login failed"</string>
     <string name="startLoginBtn">click to login</string>
     <string name="template">Template</string>
-    <string name="template_edior">Template Editor</string>
+    <string name="template_editor">Template Editor</string>
 </resources>

@@ -18,12 +18,12 @@
         app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
         >
 
-        <EditText
+        <TextView
             android:id="@+id/template_editor_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/template_edior"
+            android:text="Template Use"
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -39,11 +39,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-
-
-
-
-            <EditText
+            <TextView
+                android:id="@+id/sample_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="sample title"
