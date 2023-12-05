@@ -25,9 +25,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
     TemplateRecyclerBinding binding;
     Context context;
     ViewGroup.LayoutParams itemLp;
-    public MyAdapter(Context context){this.context = context;}
+    public MyAdapter(Context context){
+        this.context = context;
+        Log.d("fff", context.toString());
+    }
     public void addItems(ArrayList<Template> inputItems){
         this.items = inputItems;
+        Log.d("ffff", items.toString());
         notifyDataSetChanged();
     }
     public Template getItem(int position){
@@ -48,7 +52,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setData(items.get(position));
-        //Log.d("LOGINBB", String.valueOf(items.get(position).hashCode()));
+        Log.d("LOGINBB", String.valueOf(items.get(position).hashCode()));
     }
     @Override
     public int getItemCount() {

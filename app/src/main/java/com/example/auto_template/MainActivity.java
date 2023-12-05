@@ -1,5 +1,7 @@
 package com.example.auto_template;
 
+import static com.example.auto_template.TemplateMainFragment.newInstance;
+
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -9,11 +11,14 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +27,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.search.SearchView;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
@@ -45,84 +52,66 @@ import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    // Access a Cloud Firestore instance from your Activity
-
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    Intent toTemplateEditorIntent;
-    Gson gson = new Gson();
-    MyAdapter myAdapter = new MyAdapter(this);
-    ArrayList<Template> items = new ArrayList<Template>();
-    Template tempTemp;
-
     ActivityMainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false);
-        binding.recyclerView.setLayoutManager(linearLayoutManager);
-        binding.recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+
+        BottomNavigationView navigationBarView = binding.bottomNav;
+        binding.bottomNav.setOnClickListener(view -> {
+            Log.d("fff1", "container");
+        });
+        transferTo(TemplateMainFragment.newInstance("param1", "param2"));
+
+        navigationBarView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                int itemView = (int)(parent.getWidth()*0.9);
-                int parentView = parent.getWidth();
-                int margin = (parentView - itemView)/2;
-                outRect.set(margin, 0, margin, 0);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+
+                if (itemId == R.id.page_1) {
+                    // Respond to navigation item 1 click
+                     transferTo(TemplateMainFragment.newInstance("param1", "param2"));
+                    return true;
+                }
+
+                if (itemId == R.id.page_2) {
+                    // Respond to navigation item 2 click
+                       transferTo(SettingFragment.newInstance("param1", "param2"));
+                    return true;
+                }
+
+                return false;
             }
         });
 
+        navigationBarView.setOnItemReselectedListener(new NavigationBarView.OnItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
 
-        binding.addFab.setOnClickListener(view -> {
-//            Log.d("debug66", "클릭리스너실행됨");
-//            //어댑터에 추가 시 에러. 로컬 저장 방식 부터 정하기 -> 해결
-////            myAdapter.add(new Template());
-////            toTemplateEditorIntent.putExtra("template_item", myAdapter.get(myAdapter.getItemCount()));
-//            toTemplateEditorIntent = new Intent(this, TemplateEditor.class);
-//            startActivity(toTemplateEditorIntent);
-        });
-        binding.filterBtn.setOnClickListener(view -> {
-            showPopup(this.findViewById(R.id.myToolbar));
-        });
-        binding.searchBtn.setOnClickListener(view -> {
-            binding.searchView.setVisibility(View.VISIBLE);
+            }
         });
         setContentView(binding.getRoot());
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    private void transferTo(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(binding.fragmentContainer.getId(), fragment);
+        fragmentTransaction.commit();
+    }
+
+
     @Override
     protected void onResume() {
-        items.clear();
-        db.collection("user1").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            // QuerySnapshot으로부터 문서 목록을 얻음
-                            QuerySnapshot querySnapshot = task.getResult();
-                            if (querySnapshot != null) {
-                                // 각 문서에 대한 반복
-                                for (QueryDocumentSnapshot document : querySnapshot) {
-                                    // 문서 데이터 가져오기 + ArrayList<Template> 인 items에 추가
-                                    tempTemp = document.toObject(Template.class);
-                                    tempTemp.id = document.getId();
-                                    Log.d("Firestore", tempTemp.toString());
-                                    items.add(tempTemp);
-                                }
-                            } else {
-                                Log.d("Firestore", "No documents found in the collection.");
-                            }
-                        } else {
-                            Log.w("Firestore", "Error getting documents.", task.getException());
-                        }
-                        //어댑터에 데이터 연결. 위치를 옮기면 오류
-                        myAdapter.addItems(items);
-                        binding.recyclerView.setAdapter(myAdapter);
-                    }
-                });
-        myAdapter.notifyDataSetChanged();
+        Log.d("fff", "onResumeMain");
         super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d("fff", "onStopMain");
+        super.onStop();
     }
 
     @Override
