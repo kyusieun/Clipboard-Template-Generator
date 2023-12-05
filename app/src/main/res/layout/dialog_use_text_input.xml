@@ -10,12 +10,14 @@
     android:padding="20dp">
 
     <TextView
+        android:id="@+id/titleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="[] 입력"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:textStyle="bold" />
+
     <EditText
         android:inputType="text"
         android:id="@+id/confirmTextView"

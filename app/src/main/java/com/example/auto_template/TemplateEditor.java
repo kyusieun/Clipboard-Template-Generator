@@ -13,25 +13,35 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 
 import com.example.auto_template.databinding.TemplateEditorBinding;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TemplateEditor extends AppCompatActivity {
     TemplateEditorBinding binding;
     Intent fromMainIntent;
     Intent toMainIntent;
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         binding = TemplateEditorBinding.inflate(getLayoutInflater());
         fromMainIntent = getIntent();
         Template tempTemp = fromMainIntent.getParcelableExtra("selected_template", Template.class);
         assert tempTemp != null;
-        Log.d("TemplateEditor", tempTemp.toString());
-
-        binding.templateEditorTitle.setText(tempTemp.title);
+        binding.sampleTitle.setText(tempTemp.title);
         binding.templateEditorEditText.setText(tempTemp.content);
 
         // 텍스트 버튼
@@ -63,7 +73,7 @@ public class TemplateEditor extends AppCompatActivity {
                     String currentText = binding.templateEditorEditText.getText().toString();
                     String newText = currentText.substring(0, cursorPosition) + "{{" + inputText + "}}" + currentText.substring(cursorPosition);
                     binding.templateEditorEditText.setText(newText);
-                    binding.templateEditorEditText.setSelection(cursorPosition + inputText.length()); // 커서를 삽입된 텍스트 뒤로 이동
+                    binding.templateEditorEditText.setSelection(cursorPosition + inputText.length() + 4); // 커서를 삽입된 텍스트 뒤로 이동
                 }
                 dialog.dismiss();
             });
@@ -73,43 +83,64 @@ public class TemplateEditor extends AppCompatActivity {
 
         // 날짜 버튼
         binding.btnClockKeyword.setOnClickListener(view -> {
-            // Create a date picker dialog
-            Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            // Create a dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(TemplateEditor.this);
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.dialog_text_input, null);
+            builder.setView(dialogView);
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(TemplateEditor.this, (view1, year1, month1, dayOfMonth) -> {
-                // Format the date into "yyyy-MM-dd" format
-                String formattedMonth = (month1 + 1) < 10 ? "0" + (month1 + 1) : String.valueOf(month1 + 1);
-                String formattedDay = dayOfMonth < 10 ? "0" + dayOfMonth : String.valueOf(dayOfMonth);
-                String selectedDate = year1 + "-" + formattedMonth + "-" + formattedDay;
+            EditText confirmTextView = dialogView.findViewById(R.id.confirmTextView);
+            Button noButton = dialogView.findViewById(R.id.noButton);
+            Button yesButton = dialogView.findViewById(R.id.yesButton);
 
-                // Insert the date into the editor
+            AlertDialog dialog = builder.create();
+
+            // Set click listener for "No" button
+            noButton.setOnClickListener(v -> dialog.dismiss());
+
+            // Set click listener for "Yes" button
+            yesButton.setOnClickListener(v -> {
+                String inputText = confirmTextView.getText().toString();
+                // Handle the input text here
+                // For example, you can insert the text into the editor
                 int cursorPosition = binding.templateEditorEditText.getSelectionStart();
                 if (cursorPosition < 0) {
                     Toast.makeText(this, "커서를 위치시켜주세요.", Toast.LENGTH_SHORT).show();
                 } else {
                     String currentText = binding.templateEditorEditText.getText().toString();
-                    String newText = currentText.substring(0, cursorPosition) + "[[" + selectedDate + "]]" + currentText.substring(cursorPosition);
+                    String newText = currentText.substring(0, cursorPosition) + "[[" + inputText + "]]" + currentText.substring(cursorPosition);
                     binding.templateEditorEditText.setText(newText);
-                    binding.templateEditorEditText.setSelection(cursorPosition + selectedDate.length() + 4); // 커서를 삽입된 텍스트 뒤로 이동
+                    binding.templateEditorEditText.setSelection(cursorPosition + inputText.length() + 4); // 커서를 삽입된 텍스트 뒤로 이동
                 }
-            }, year, month, day);
+                dialog.dismiss();
+            });
 
-            datePickerDialog.show();
+            dialog.show();
         });
 
-        // 저장 버튼 수정 요망
+        // 저장 버튼
         binding.btnTemplateEditorExit.setOnClickListener(view ->{
-            tempTemp.title = binding.templateEditorTitle.getText().toString();
-            tempTemp.content = binding.templateEditorEditText.getText().toString();
-            tempTemp.last_edit = Timestamp.now();
-            toMainIntent = new Intent(this, MainActivity.class);
-            toMainIntent.putExtra("changed_template", tempTemp)
-                            .putExtra("changed_item_position", fromMainIntent.getIntExtra("selected_item_position", -1));
+            DocumentReference docRef = db.collection("user1").document(tempTemp.id);
+            docRef.update(
+                    "title", binding.sampleTitle.getText().toString(),
+                    "content", binding.templateEditorEditText.getText().toString(),
+                    "last_edit", Timestamp.now()
+            ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("Firestore", "DocumentSnapshot successfully updated!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(Exception e) {
+                            Log.d("Firestore", "Error updating document", e);
+                        }
+                    });
 
+            toMainIntent = new Intent(this, MainActivity.class);
             startActivity(toMainIntent);
+            finish();
         });
         super.onCreate(savedInstanceState);
         setContentView(binding.getRoot());

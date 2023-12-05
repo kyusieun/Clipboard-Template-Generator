@@ -1,5 +1,9 @@
 package com.example.auto_template;
 
+import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -8,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.PopupMenu;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,10 +54,12 @@ public class MainActivity extends AppCompatActivity {
     MyAdapter myAdapter = new MyAdapter(this);
     ArrayList<Template> items = new ArrayList<Template>();
     Template tempTemp;
+
+    ActivityMainBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false);
         binding.recyclerView.setLayoutManager(linearLayoutManager);
         binding.recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -80,64 +87,23 @@ public class MainActivity extends AppCompatActivity {
         binding.searchBtn.setOnClickListener(view -> {
             binding.searchView.setVisibility(View.VISIBLE);
         });
+        setContentView(binding.getRoot());
+    }
 
-//        Log.d("LOGIN3", loadJsonFromLocal());
-        // Firestore에서 data loding 후 LogCat에 출력
-        // document.getData()를 사용해서 변수에 저장 가능
-        // 현재 document.getData() 쿼리의 결과는 아래 주석과 같음
-        // 	{latest_use: 2023년 11월 27일 오전 5시 5분 44초 UTC+9, content: "내용", id: 0, reference: 4, tag: ["tag1", "tag2"], last_edit: 2023년 11월 26일 오전 5시 5분 28초 UTC+9, title: "안녕하세요"}
-
-
-        // FireStore 데이터 추가 함수입니다.
-//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-        // 원래 currentUser != null 인데 비활성화 하려고 null 넣었습니다.
-        if (null != null) {
-//            String userUid = currentUser.getUid();
-            String userUid = "user1";
-
-            Map<String, Object> userData = new HashMap<>();
-            Map<String, Object> templateData = new HashMap<>();
-            templateData.put("last_edit", new Timestamp(new Date()));
-            templateData.put("latest_use", new Timestamp(new Date()));
-            templateData.put("reference", 4);
-            List<String> tags = Arrays.asList("tag1", "tag2", "tag3");
-            templateData.put("tag", tags);
-            templateData.put("title", "제목");
-            templateData.put("content", "안녕하세요. {{고객명}}님, 구매하신 상품에 대한 추가 정보를 [[날짜]]까지 회신하여 주시면 추가 조치를 해드리겠습니다. 추가 문의사항이 있으시다면 {{주소}}로 방문해주세요.");
-            String template_name = new Timestamp(new Date()).toString();
-            userData.put(template_name, templateData);
-//            userData.put("email", currentUser.getEmail());
-            // 사용자 UID를 기반으로 데이터 추가
-            db.collection("users").document(userUid)
-                    .set(userData, SetOptions.merge())
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("Firestore", "DocumentSnapshot successfully written!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(Exception e) {
-                            Log.w("Firestore", "Error writing document", e);
-                        }
-                    });
-        }
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    protected void onResume() {
+        items.clear();
         db.collection("user1").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-
                     @Override
-                    public void onComplete( Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             // QuerySnapshot으로부터 문서 목록을 얻음
                             QuerySnapshot querySnapshot = task.getResult();
                             if (querySnapshot != null) {
                                 // 각 문서에 대한 반복
                                 for (QueryDocumentSnapshot document : querySnapshot) {
-                                    // 문서 ID 가져오기
-                                    //items.add(new Template(document.getId()));
-                                    Log.d("Firestore", "Document ID: " + document.getId());
                                     // 문서 데이터 가져오기 + ArrayList<Template> 인 items에 추가
                                     tempTemp = document.toObject(Template.class);
                                     tempTemp.id = document.getId();
@@ -151,52 +117,28 @@ public class MainActivity extends AppCompatActivity {
                             Log.w("Firestore", "Error getting documents.", task.getException());
                         }
                         //어댑터에 데이터 연결. 위치를 옮기면 오류
-                    myAdapter.addItems(items);
-                    binding.recyclerView.setAdapter(myAdapter);
+                        myAdapter.addItems(items);
+                        binding.recyclerView.setAdapter(myAdapter);
                     }
                 });
-        setContentView(binding.getRoot());
-    }
-
-    @Override
-    protected void onResume() {
-
+        myAdapter.notifyDataSetChanged();
         super.onResume();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
-        tempTemp = intent.getParcelableExtra("changed_template", Template.class);
-        items.set(intent.getIntExtra("changed_item_position", -1), tempTemp);
-        Log.d("fromTemplateEditor", tempTemp.toString());
+        String clipboard_data = intent.getStringExtra("template_use");
+        if (clipboard_data != null) {
+            Log.d("fromTemplateUse", clipboard_data);
 
+            // Get the system clipboard
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            // Create a clip data
+            ClipData clip = ClipData.newPlainText("label", clipboard_data);
+            // Set the clipboard's primary clip.
+            clipboard.setPrimaryClip(clip);
+        }
 
-//            String userUid = currentUser.getUid();
-        String userUid = "user1";
-        Map<String, Object> templateData = new HashMap<>();
-        templateData.put("last_edit", tempTemp.last_edit);
-        templateData.put("latest_use", tempTemp.latest_use);
-        templateData.put("reference", tempTemp.reference);
-        templateData.put("tag", tempTemp.tag);
-        templateData.put("title", tempTemp.title);
-        templateData.put("content", tempTemp.content);
-        db.collection(userUid).document(tempTemp.id)
-                .set(templateData, SetOptions.merge())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firestore", "템플릿 업데이트 성공");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(Exception e) {
-                        Log.w("Firestore", "템플릿 업데이트 실패", e);
-                    }
-                });
-
-
-        myAdapter.notifyDataSetChanged();
         super.onNewIntent(intent);
     }
 

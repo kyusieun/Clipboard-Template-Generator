@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Template"
+            android:text="Template Use"
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -37,6 +37,7 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <EditText
+            android:id="@+id/sample_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="sample title"
