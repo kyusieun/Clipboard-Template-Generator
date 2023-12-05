@@ -1,5 +1,6 @@
 package com.example.auto_template;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -104,7 +106,6 @@ public class TemplateMainFragment extends Fragment {
         binding = FragmentTemplateMainBinding.inflate(getLayoutInflater());
         Log.d("fff", "onCreateView");
         // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_template_main, container, false);
         return binding.getRoot();
     }
 
@@ -113,7 +114,6 @@ public class TemplateMainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.d("fff", "onViewCreated");
 
-        Log.d("fff2", binding.recyclerView.toString());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         binding.recyclerView.setLayoutManager(linearLayoutManager);
         binding.recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -127,56 +127,21 @@ public class TemplateMainFragment extends Fragment {
         });
         binding.addFab.setOnClickListener(v -> {
             Toast.makeText(requireContext(), "addFab", Toast.LENGTH_SHORT).show();
-            Log.d("fff", "aaa");
             //템플릿 추가 버튼 구현 필요
         });
         binding.filterBtn.setOnClickListener(v -> {
             showPopup(binding.myToolbar);
-            Log.d("fff", "aaa");
         });
         binding.searchBtn.setOnClickListener(v -> {
             binding.searchView.setVisibility(View.VISIBLE);
-            Log.d("fff", "aaa");
         });
-        // FireStore 데이터 추가 함수입니다.
-//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-        // 원래 currentUser != null 인데 비활성화 하려고 null 넣었습니다.
-        if (null != null) {
-//            String userUid = currentUser.getUid();
-            String userUid = "user1";
-
-            Map<String, Object> userData = new HashMap<>();
-            Map<String, Object> templateData = new HashMap<>();
-            templateData.put("last_edit", new Timestamp(new Date()));
-            templateData.put("latest_use", new Timestamp(new Date()));
-            templateData.put("reference", 4);
-            List<String> tags = Arrays.asList("tag1", "tag2", "tag3");
-            templateData.put("tag", tags);
-            templateData.put("title", "제목");
-            templateData.put("content", "안녕하세요. {{고객명}}님, 구매하신 상품에 대한 추가 정보를 [[날짜]]까지 회신하여 주시면 추가 조치를 해드리겠습니다. 추가 문의사항이 있으시다면 {{주소}}로 방문해주세요.");
-            String template_name = new Timestamp(new Date()).toString();
-            userData.put(template_name, templateData);
-//            userData.put("email", currentUser.getEmail());
-            // 사용자 UID를 기반으로 데이터 추가
-            db.collection("users").document(userUid)
-                    .set(userData, SetOptions.merge())
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("Firestore", "DocumentSnapshot successfully written!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(Exception e) {
-                            Log.w("Firestore", "Error writing document", e);
-                        }
-                    });
-        }
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onResume() {
+        items.clear();
         db.collection("user1").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-
                     @Override
                     public void onComplete(Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
@@ -206,6 +171,7 @@ public class TemplateMainFragment extends Fragment {
                         Log.d("fff", myAdapter.getItems().toString());
                     }
                 });
+        super.onResume();
     }
 
     @Override
@@ -231,4 +197,11 @@ public class TemplateMainFragment extends Fragment {
         Log.d("fff", "onDetach");
         super.onDetach();
     }
+    /* Fragment 변경 후 미작동. 수정 필요
+    public void onBackPressed(){
+        SearchView searchView = binding.searchView;
+        searchView.setVisibility(searchView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+    }
+    */
+
 }
