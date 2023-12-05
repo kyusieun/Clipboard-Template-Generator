@@ -169,6 +169,33 @@ public class MainActivity extends AppCompatActivity {
         tempTemp = intent.getParcelableExtra("changed_template", Template.class);
         items.set(intent.getIntExtra("changed_item_position", -1), tempTemp);
         Log.d("fromTemplateEditor", tempTemp.toString());
+
+
+//            String userUid = currentUser.getUid();
+        String userUid = "user1";
+        Map<String, Object> templateData = new HashMap<>();
+        templateData.put("last_edit", tempTemp.last_edit);
+        templateData.put("latest_use", tempTemp.latest_use);
+        templateData.put("reference", tempTemp.reference);
+        templateData.put("tag", tempTemp.tag);
+        templateData.put("title", tempTemp.title);
+        templateData.put("content", tempTemp.content);
+        db.collection(userUid).document(tempTemp.id)
+                .set(templateData, SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "템플릿 업데이트 성공");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.w("Firestore", "템플릿 업데이트 실패", e);
+                    }
+                });
+
+
         myAdapter.notifyDataSetChanged();
         super.onNewIntent(intent);
     }
