@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/view_round_color4"
+    android:gravity="center"
+    android:minWidth="300dp"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="텍스트 입력을 받을 키워드를 설정하세요"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+    <EditText
+        android:inputType="text"
+        android:id="@+id/confirmTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:minHeight="50dp"
+        android:textSize="18sp"
+        android:background="@drawable/view_round_while"
+        android:autofillHints="키워드 이름"
+        android:hint="키워드 입력"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/noButton"
+            android:background="@drawable/view_round_color3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="7dp"
+            android:layout_weight="1"
+            android:text="취소"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/yesButton"
+            android:background="@drawable/view_round_color3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="확인"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+</LinearLayout>
