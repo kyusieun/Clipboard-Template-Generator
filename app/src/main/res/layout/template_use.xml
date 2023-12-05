@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Template Use"
+            android:text="Template"
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -33,20 +33,15 @@
         android:id="@+id/texteditor_topbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/c4"
+        android:background="@color/c5"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
-        <LinearLayout
+
+        <EditText
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/sample_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="sample title"
-                android:textSize="24sp"
-                />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:text="sample title"
+            android:textSize="24sp" />
+
     </LinearLayout>
     <LinearLayout
         android:id="@+id/set_account_view"
