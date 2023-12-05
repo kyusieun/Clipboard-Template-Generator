@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/template_edior"
+            android:text="@string/template_editor"
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold" />

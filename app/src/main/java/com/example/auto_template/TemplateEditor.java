@@ -3,6 +3,7 @@ package com.example.auto_template;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import com.google.firebase.Timestamp;
 
 import com.example.auto_template.databinding.TemplateEditorBinding;
+
+import java.util.Calendar;
 
 public class TemplateEditor extends AppCompatActivity {
     TemplateEditorBinding binding;
@@ -70,41 +73,32 @@ public class TemplateEditor extends AppCompatActivity {
 
         // 날짜 버튼
         binding.btnClockKeyword.setOnClickListener(view -> {
-            // Create a dialog
-            AlertDialog.Builder builder = new AlertDialog.Builder(TemplateEditor.this);
-            LayoutInflater inflater = getLayoutInflater();
-            View dialogView = inflater.inflate(R.layout.dialog_text_input, null);
-            builder.setView(dialogView);
+            // Create a date picker dialog
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            EditText confirmTextView = dialogView.findViewById(R.id.confirmTextView);
-            Button noButton = dialogView.findViewById(R.id.noButton);
-            Button yesButton = dialogView.findViewById(R.id.yesButton);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(TemplateEditor.this, (view1, year1, month1, dayOfMonth) -> {
+                // Format the date into "yyyy-MM-dd" format
+                String formattedMonth = (month1 + 1) < 10 ? "0" + (month1 + 1) : String.valueOf(month1 + 1);
+                String formattedDay = dayOfMonth < 10 ? "0" + dayOfMonth : String.valueOf(dayOfMonth);
+                String selectedDate = year1 + "-" + formattedMonth + "-" + formattedDay;
 
-            AlertDialog dialog = builder.create();
-
-            // Set click listener for "No" button
-            noButton.setOnClickListener(v -> dialog.dismiss());
-
-            // Set click listener for "Yes" button
-            yesButton.setOnClickListener(v -> {
-                String inputText = confirmTextView.getText().toString();
-                // Handle the input text here
-                // For example, you can insert the text into the editor
+                // Insert the date into the editor
                 int cursorPosition = binding.templateEditorEditText.getSelectionStart();
                 if (cursorPosition < 0) {
                     Toast.makeText(this, "커서를 위치시켜주세요.", Toast.LENGTH_SHORT).show();
                 } else {
                     String currentText = binding.templateEditorEditText.getText().toString();
-                    String newText = currentText.substring(0, cursorPosition) + "[[" + inputText + "]]" + currentText.substring(cursorPosition);
+                    String newText = currentText.substring(0, cursorPosition) + "[[" + selectedDate + "]]" + currentText.substring(cursorPosition);
                     binding.templateEditorEditText.setText(newText);
-                    binding.templateEditorEditText.setSelection(cursorPosition + inputText.length()); // 커서를 삽입된 텍스트 뒤로 이동
+                    binding.templateEditorEditText.setSelection(cursorPosition + selectedDate.length() + 4); // 커서를 삽입된 텍스트 뒤로 이동
                 }
-                dialog.dismiss();
-            });
+            }, year, month, day);
 
-            dialog.show();
+            datePickerDialog.show();
         });
-
 
         // 저장 버튼 수정 요망
         binding.btnTemplateEditorExit.setOnClickListener(view ->{

@@ -74,20 +74,31 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
     static class ViewHolder extends RecyclerView.ViewHolder{
     private TemplateRecyclerBinding binding;
         Intent toTemplateEditorIntent;
+
+        Intent toTemplateUseIntent;
         Template currentData;
         public ViewHolder(TemplateRecyclerBinding binding, Context context){
             super(binding.getRoot());
             this.binding = binding;
-            binding.recyclerEditBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    toTemplateEditorIntent = new Intent(context, TemplateEditor.class);
-                    toTemplateEditorIntent
+            binding.recyclerEditBtn.setOnClickListener(view -> {
+                toTemplateEditorIntent = new Intent(context, TemplateEditor.class);
+                toTemplateEditorIntent
+                        .putExtra("selected_template", currentData)
+                        .putExtra("selected_item_position", getAbsoluteAdapterPosition());
+                startActivity(context, toTemplateEditorIntent, null);
+            });
+
+            binding.recyclerCardView.setOnClickListener(view -> {
+                // editBtn과 중복 방지
+                if (!binding.recyclerEditBtn.isPressed()) {
+                    toTemplateUseIntent = new Intent(context, TemplateUse.class);
+                    toTemplateUseIntent
                             .putExtra("selected_template", currentData)
                             .putExtra("selected_item_position", getAbsoluteAdapterPosition());
-                    startActivity(context, toTemplateEditorIntent, null);
+                    startActivity(context, toTemplateUseIntent, null);
                 }
             });
+
         }
         public void setData(Template data){
             currentData = data;
