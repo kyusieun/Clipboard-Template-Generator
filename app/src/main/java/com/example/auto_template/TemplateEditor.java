@@ -20,6 +20,7 @@ public class TemplateEditor extends AppCompatActivity {
         binding = TemplateEditorBinding.inflate(getLayoutInflater());
         fromMainIntent = getIntent();
         Template tempTemp = fromMainIntent.getParcelableExtra("selected_template", Template.class);
+        assert tempTemp != null;
         Log.d("TemplateEditor", tempTemp.toString());
 
         binding.templateEditorTitle.setText(tempTemp.title);
