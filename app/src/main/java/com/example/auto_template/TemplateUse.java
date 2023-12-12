@@ -4,6 +4,7 @@ package com.example.auto_template;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +34,7 @@ public class TemplateUse extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         binding = TemplateUseBinding.inflate(getLayoutInflater());
         fromMainIntent = getIntent();
-        Template tempTemp = fromMainIntent.getParcelableExtra("selected_template", Template.class);
+        tempTemp = fromMainIntent.getParcelableExtra("selected_template", Template.class);
         assert tempTemp != null;
 
         binding.sampleTitle.setText(tempTemp.title);
@@ -59,35 +60,46 @@ public class TemplateUse extends AppCompatActivity {
 
         List<Object> element = parcedContent.get(index);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(TemplateUse.this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_use_text_input, null);
-        builder.setView(dialogView);
+        if ((int)element.get(1) == 0) { // Text input
+            AlertDialog.Builder builder = new AlertDialog.Builder(TemplateUse.this);
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.dialog_use_text_input, null);
+            builder.setView(dialogView);
 
-        TextView titleTextView = dialogView.findViewById(R.id.titleTextView);
-        titleTextView.setText(String.format("%s 변수 입력", element.get(0)));
-        EditText confirmTextView = dialogView.findViewById(R.id.confirmTextView);
-        Button noButton = dialogView.findViewById(R.id.noButton);
-        Button yesButton = dialogView.findViewById(R.id.yesButton);
+            TextView titleTextView = dialogView.findViewById(R.id.titleTextView);
+            titleTextView.setText(String.format("%s 변수 입력", element.get(0)));
+            EditText confirmTextView = dialogView.findViewById(R.id.confirmTextView);
+            Button noButton = dialogView.findViewById(R.id.noButton);
+            Button yesButton = dialogView.findViewById(R.id.yesButton);
 
-        AlertDialog dialog = builder.create();
+            AlertDialog dialog = builder.create();
 
-        // Set click listener for "No" button
-        noButton.setOnClickListener(v -> dialog.dismiss());
+            // Set click listener for "No" button
+            noButton.setOnClickListener(v -> dialog.dismiss());
 
-        // Set click listener for "Yes" button
-        yesButton.setOnClickListener(v -> {
-            String inputText = confirmTextView.getText().toString();
-            // 입력받은 텍스트를 element의 0번째 인덱스에 할당
-            element.set(0,inputText);
-            Log.d("temuse", parcedContent.toString());
-            dialog.dismiss();
+            // Set click listener for "Yes" button
+            yesButton.setOnClickListener(v -> {
+                String inputText = confirmTextView.getText().toString();
+                // 입력받은 텍스트를 element의 0번째 인덱스에 할당
+                element.set(0,inputText);
+                Log.d("temuse", parcedContent.toString());
+                dialog.dismiss();
 
-            // Show the next dialog
-            showDialogs(parcedContent, index + 1, content);
-        });
+                // Show the next dialog
+                showDialogs(parcedContent, index + 1, content);
+            });
 
-        dialog.show();
+            dialog.show();
+        } else { // Date input
+            DatePickerDialog datePickerDialog = new DatePickerDialog(TemplateUse.this);
+            datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
+                String date = year + "." + (month + 1) + "." + dayOfMonth;
+                element.set(0, date);
+                showDialogs(parcedContent, index + 1, content);
+            });
+            datePickerDialog.show();
+        }
+
     }
 
     public List<List<Object>> parseContent(String content) {
@@ -100,11 +112,11 @@ public class TemplateUse extends AppCompatActivity {
         while (matcher.find()) {
             List<Object> match = new ArrayList<>();
             if (matcher.group(1) != null) {
-                // If the text is inside {{ and }}, add the text and a flag of 0
+                // 텍스트
                 match.add(matcher.group(1));
                 match.add(0);
             } else {
-                // If the text is inside [[ and ]], add the text and a flag of 1
+                // 날짜
                 match.add(matcher.group(2));
                 match.add(1);
             }
