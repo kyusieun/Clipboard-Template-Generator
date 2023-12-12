@@ -17,10 +17,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 
 import com.example.auto_template.databinding.TemplateEditorBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,14 +35,24 @@ public class TemplateEditor extends AppCompatActivity {
     TemplateEditorBinding binding;
     Intent fromMainIntent;
     Intent toMainIntent;
+    String email;
 
+    boolean isEdit = true;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            email = user.getEmail();
+        }
+
         binding = TemplateEditorBinding.inflate(getLayoutInflater());
         fromMainIntent = getIntent();
         Template tempTemp = fromMainIntent.getParcelableExtra("selected_template", Template.class);
-        assert tempTemp != null;
+        if (tempTemp == null) {
+            tempTemp = new Template();
+            isEdit = false;
+        }
         binding.sampleTitle.setText(tempTemp.title);
         binding.templateEditorEditText.setText(tempTemp.content);
 
@@ -118,29 +131,67 @@ public class TemplateEditor extends AppCompatActivity {
         });
 
         // 저장 버튼
-        binding.btnTemplateEditorExit.setOnClickListener(view ->{
-            DocumentReference docRef = db.collection("user1").document(tempTemp.id);
-            docRef.update(
-                    "title", binding.sampleTitle.getText().toString(),
-                    "content", binding.templateEditorEditText.getText().toString(),
-                    "last_edit", Timestamp.now()
-            ).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("Firestore", "DocumentSnapshot successfully updated!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(Exception e) {
-                            Log.d("Firestore", "Error updating document", e);
-                        }
-                    });
+        if (isEdit == true){ // 에딧일 경우
+            Template finalTempTemp = tempTemp;
+            binding.btnTemplateEditorExit.setOnClickListener(view ->{
+                DocumentReference docRef = db.collection(email).document(finalTempTemp.id);
+                docRef.update(
+                                "title", binding.sampleTitle.getText().toString(),
+                                "content", binding.templateEditorEditText.getText().toString(),
+                                "last_edit", Timestamp.now()
+                        ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("Firestore", "DocumentSnapshot successfully updated!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(Exception e) {
+                                Log.d("Firestore", "Error updating document", e);
+                            }
+                        });
 
-            toMainIntent = new Intent(this, MainActivity.class);
-            startActivity(toMainIntent);
-            finish();
-        });
+                toMainIntent = new Intent(this, MainActivity.class);
+                startActivity(toMainIntent);
+                finish();
+            });
+        } else { // 추가일 경우
+            binding.btnTemplateEditorExit.setOnClickListener(view ->{
+                Map<String, Object> data = new HashMap<>();
+                ArrayList<String> tag = new ArrayList<>();
+                Log.d("Firestore", binding.sampleTitle.getText().toString());
+                data.put("title", binding.sampleTitle.getText().toString());
+                data.put("content", binding.templateEditorEditText.getText().toString());
+                data.put("last_edit", Timestamp.now());
+                data.put("latest_use", Timestamp.now());
+                data.put("reference", 0);
+                data.put("tag", tag);
+
+                db.collection(email).add(data)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d("Firestore", "DocumentSnapshot written with ID: " + documentReference.getId());
+                                documentReference.update("id", documentReference.getId());
+                                toMainIntent = new Intent(TemplateEditor.this, MainActivity.class);
+                                startActivity(toMainIntent);
+                                finish();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(Exception e) {
+                                Log.w("Firestore", "Error adding document", e);
+                            }
+                        });
+                toMainIntent = new Intent(this, MainActivity.class);
+                startActivity(toMainIntent);
+                finish();
+            });
+
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(binding.getRoot());
     }

@@ -1,9 +1,12 @@
 package com.example.auto_template;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,6 +30,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -46,12 +51,10 @@ import java.util.Map;
  */
 public class TemplateMainFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -126,8 +129,9 @@ public class TemplateMainFragment extends Fragment {
             }
         });
         binding.addFab.setOnClickListener(v -> {
-            Toast.makeText(requireContext(), "addFab", Toast.LENGTH_SHORT).show();
-            //템플릿 추가 버튼 구현 필요
+            toTemplateEditorIntent = new Intent(getContext(), TemplateEditor.class);
+            toTemplateEditorIntent.putExtra("selected_template", "");
+            startActivity(toTemplateEditorIntent);
         });
         binding.filterBtn.setOnClickListener(v -> {
             showPopup(binding.myToolbar);
@@ -139,38 +143,51 @@ public class TemplateMainFragment extends Fragment {
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onResume() {
-        items.clear();
-        db.collection("user1").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            // QuerySnapshot으로부터 문서 목록을 얻음
-                            QuerySnapshot querySnapshot = task.getResult();
-                            if (querySnapshot != null) {
-                                // 각 문서에 대한 반복
-                                for (QueryDocumentSnapshot document : querySnapshot) {
-                                    // 문서 ID 가져오기
-                                    //items.add(new Template(document.getId()));
-                                    Log.d("Firestore", "Document ID: " + document.getId());
-                                    // 문서 데이터 가져오기 + ArrayList<Template> 인 items에 추가
-                                    tempTemp = document.toObject(Template.class);
-                                    tempTemp.id = document.getId();
-                                    Log.d("Firestore", tempTemp.toString());
-                                    items.add(tempTemp);
+
+        // 로그인 확인 코드입니다.
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String email = user.getEmail();
+            items.clear();
+            db.collection(email).get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                // QuerySnapshot으로부터 문서 목록을 얻음
+                                QuerySnapshot querySnapshot = task.getResult();
+                                if (querySnapshot != null) {
+                                    // 각 문서에 대한 반복
+                                    for (QueryDocumentSnapshot document : querySnapshot) {
+                                        // 문서 ID 가져오기
+                                        //items.add(new Template(document.getId()));
+                                        Log.d("Firestore", "Document ID: " + document.getId());
+                                        // 문서 데이터 가져오기 + ArrayList<Template> 인 items에 추가
+                                        tempTemp = document.toObject(Template.class);
+                                        tempTemp.id = document.getId();
+                                        Log.d("Firestore", tempTemp.toString());
+                                        items.add(tempTemp);
+                                    }
+                                } else {
+                                    Log.d("Firestore", "No documents found in the collection.");
                                 }
                             } else {
-                                Log.d("Firestore", "No documents found in the collection.");
+                                Log.w("Firestore", "Error getting documents.", task.getException());
                             }
-                        } else {
-                            Log.w("Firestore", "Error getting documents.", task.getException());
+                            //어댑터에 데이터 연결. 위치를 옮기면 오류
+                            myAdapter.addItems(items);
+                            binding.recyclerView.setAdapter(myAdapter);
+                            Log.d("fff", myAdapter.getItems().toString());
                         }
-                        //어댑터에 데이터 연결. 위치를 옮기면 오류
-                        myAdapter.addItems(items);
-                        binding.recyclerView.setAdapter(myAdapter);
-                        Log.d("fff", myAdapter.getItems().toString());
-                    }
-                });
+                    });
+
+        } else {
+//            Intent intent = new Intent(this, LoginActivity.class);
+//            startActivity(intent);
+//            finish();
+        }
+
+
         super.onResume();
     }
 

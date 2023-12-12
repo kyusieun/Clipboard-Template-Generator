@@ -28,6 +28,13 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // 로그인 되어 있으면 바로 메인으로 이동
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
+
         ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
         // 로그인 시도 후  OnSignResult로 이동 로그인 성공 시 MainActivity로 이동
         binding.startLoginBtn.setOnClickListener(view -> {
