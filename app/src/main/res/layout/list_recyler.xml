@@ -6,23 +6,19 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/list_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:background="@color/gray_400"
             android:layout_marginEnd="12dp">
 
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:background="@color/gray_400"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
+                <EditText
+                    android:id="@+id/list_recycler_text"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="sample text"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -30,13 +26,13 @@
 
                 <ImageView
                     android:id="@+id/btn_close"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:src="@drawable/close_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginEnd="8dp"/>
+                    android:layout_marginEnd="20dp"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

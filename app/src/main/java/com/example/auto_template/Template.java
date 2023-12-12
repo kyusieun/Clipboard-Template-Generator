@@ -16,6 +16,7 @@ import java.sql.Time;
 import java.time.LocalDateTime;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -114,4 +115,30 @@ public class Template implements Parcelable {
    public Timestamp getLatest_use() {
       return latest_use;
    }
+
+   public static class EditedComparator implements Comparator<Template> {
+      @Override
+      public int compare(Template template, Template t1) {
+         return template.last_edit.compareTo(t1.last_edit);
+      }
+   }
+   public static class UsedComparator implements Comparator<Template> {
+      @Override
+      public int compare(Template template, Template t1) {
+         return template.latest_use.compareTo(t1.latest_use);
+      }
+   }
+   public static class UsageComparator implements Comparator<Template> {
+      @Override
+      public int compare(Template template, Template t1) {
+         return Long.compare(template.reference, t1.reference);
+      }
+   }
+   public static class NameComparator implements Comparator<Template> {
+      @Override
+      public int compare(Template template, Template t1) {
+         return template.title.compareTo(t1.title);
+      }
+   }
+
 }

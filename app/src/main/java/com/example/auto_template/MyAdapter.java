@@ -75,13 +75,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
         }
     };
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+
+    class ViewHolder extends RecyclerView.ViewHolder{
     private TemplateRecyclerBinding binding;
         Intent toTemplateEditorIntent;
 
         Intent toTemplateUseIntent;
         Template currentData;
-        public ViewHolder(TemplateRecyclerBinding binding, Context context){
+        private ViewHolder(TemplateRecyclerBinding binding, Context context){
             super(binding.getRoot());
             this.binding = binding;
             binding.recyclerEditBtn.setOnClickListener(view -> {

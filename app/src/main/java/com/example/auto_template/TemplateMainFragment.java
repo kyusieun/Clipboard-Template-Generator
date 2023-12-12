@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
@@ -44,7 +45,7 @@ import java.util.Map;
  * Use the {@link TemplateMainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TemplateMainFragment extends Fragment {
+public class TemplateMainFragment extends Fragment  implements PopupMenu.OnMenuItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -98,6 +99,7 @@ public class TemplateMainFragment extends Fragment {
         PopupMenu popup = new PopupMenu(requireContext(), v);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.sort_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(this::onMenuItemClick);
         popup.show();
     }
     @Override
@@ -197,11 +199,33 @@ public class TemplateMainFragment extends Fragment {
         Log.d("fff", "onDetach");
         super.onDetach();
     }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.by_latest_edited_order){
+            myAdapter.items.sort(new Template.EditedComparator());
+            myAdapter.notifyDataSetChanged();
+            return true;
+        } else if (id == R.id.by_latest_used_order) {
+            myAdapter.items.sort(new Template.UsedComparator());
+            myAdapter.notifyDataSetChanged();
+            return true;
+        } else if (id == R.id.by_usage_order) {
+            myAdapter.items.sort(new Template.UsageComparator());
+            myAdapter.notifyDataSetChanged();
+            return true;
+        } else if (id == R.id.by_name_order) {
+            myAdapter.items.sort(new Template.NameComparator());
+            myAdapter.notifyDataSetChanged();
+            return true;
+        }
+        return false;
+    }
+}
     /* Fragment 변경 후 미작동. 수정 필요
     public void onBackPressed(){
         SearchView searchView = binding.searchView;
         searchView.setVisibility(searchView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
     }
     */
-
-}
