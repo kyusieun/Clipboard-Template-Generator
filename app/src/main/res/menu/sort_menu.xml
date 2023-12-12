@@ -3,8 +3,7 @@
 
     <group android:checkableBehavior="single">
         <item
-
-            android:id="@+id/by_latest_added_order"
+            android:id="@+id/by_latest_edited_order"
             android:actionLayout="@layout/menu_item"
             android:title="최신 추가 순" />
         <item
@@ -14,7 +13,7 @@
             android:id="@+id/by_usage_order"
             android:title="사용량 순" />
         <item
-            android:id="@+id/blue"
-            android:title="사용량 순" />
+            android:id="@+id/by_name_order"
+            android:title="이름 순" />
     </group>
 </menu>

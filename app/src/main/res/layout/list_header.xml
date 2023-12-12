@@ -27,7 +27,7 @@
         android:paddingBottom="5dp"
         app:layout_constraintTop_toBottomOf="@+id/bar01">
 
-        <TextView
+        <EditText
             android:id="@+id/header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,9 +51,11 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/header_contents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
