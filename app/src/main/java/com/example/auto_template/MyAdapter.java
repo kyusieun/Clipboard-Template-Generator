@@ -34,6 +34,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
         this.context = context;
         Log.d("fff", context.toString());
     }
+
+    public interface OnItemDeleteListener {
+        void onItemDelete();
+    }
+
+    private OnItemDeleteListener onItemDeleteListener;
+
+    public void setOnItemDeleteListener(OnItemDeleteListener listener) {
+        this.onItemDeleteListener = listener;
+    }
+
     public void addItems(ArrayList<Template> inputItems){
         this.items = inputItems;
         Log.d("ffff", items.toString());
@@ -78,6 +89,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
         }
+
     };
 
 
@@ -112,6 +124,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
                                 Log.w("Firestore", "Error deleting document", e);
                             }
                         });
+                if (onItemDeleteListener != null) {
+                    onItemDeleteListener.onItemDelete();
+                }
             });
             // TODO : 템플릿 삭제 반영하여 리로드
 

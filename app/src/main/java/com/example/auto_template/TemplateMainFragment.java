@@ -146,6 +146,13 @@ public class TemplateMainFragment extends Fragment  implements PopupMenu.OnMenuI
     @Override
     public void onResume() {
 
+        myAdapter.setOnItemDeleteListener(new MyAdapter.OnItemDeleteListener() {
+            @Override
+            public void onItemDelete() {
+                onResume();
+            }
+        });
+
         // 로그인 확인 코드입니다.
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -192,6 +199,8 @@ public class TemplateMainFragment extends Fragment  implements PopupMenu.OnMenuI
 
         super.onResume();
     }
+
+
 
     @Override
     public void onStop() {
