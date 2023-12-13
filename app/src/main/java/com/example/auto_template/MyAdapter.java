@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -15,9 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.auto_template.databinding.TemplateRecyclerBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
 {
@@ -82,12 +87,34 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
 
         Intent toTemplateUseIntent;
         Template currentData;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         private ViewHolder(TemplateRecyclerBinding binding, Context context){
             super(binding.getRoot());
             this.binding = binding;
+            AtomicReference<String> email = new AtomicReference<>("");
             binding.recyclerDeleteBtn.setOnClickListener(view -> {
-                //delete 구현
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    email.set(user.getEmail());
+                }
+                Log.d("Firestore", "id: " + currentData.id);
+                db.collection(email.get()).document(currentData.id)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("Firestore", currentData.id+" successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("Firestore", "Error deleting document", e);
+                            }
+                        });
             });
+            // TODO : 템플릿 삭제 반영하여 리로드
+
             binding.recyclerEditBtn.setOnClickListener(view -> {
                 toTemplateEditorIntent = new Intent(context, TemplateEditor.class);
                 toTemplateEditorIntent
