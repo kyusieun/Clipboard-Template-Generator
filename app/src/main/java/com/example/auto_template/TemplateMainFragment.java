@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -141,11 +142,34 @@ public class TemplateMainFragment extends Fragment  implements PopupMenu.OnMenuI
         binding.searchBtn.setOnClickListener(v -> {
             binding.searchView.setVisibility(View.VISIBLE);
         });
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                handleSearch(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                handleSearch(newText);
+                return false;
+            }
+        });
+        binding.searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                myAdapter.addItems(items);
+                binding.searchView.setVisibility(View.GONE); // SearchView를 숨김
+            }
+        });
+    }
+    void handleSearch(String input){
+        ArrayList<Template> tempItems = myAdapter.search(input);
+        myAdapter.addItems(tempItems);
     }
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onResume() {
-
+        Log.d("testt", items.toString());
         myAdapter.setOnItemDeleteListener(new MyAdapter.OnItemDeleteListener() {
             @Override
             public void onItemDelete() {

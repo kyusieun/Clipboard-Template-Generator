@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void transferTo(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(binding.fragmentContainer.getId(), fragment);
+        fragmentTransaction.replace(binding.fragmentContainer.getId(), fragment).addToBackStack(null);
         fragmentTransaction.commit();
     }
 

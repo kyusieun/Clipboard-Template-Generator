@@ -119,7 +119,9 @@ public class Template implements Parcelable {
    public static class EditedComparator implements Comparator<Template> {
       @Override
       public int compare(Template template, Template t1) {
-         return template.last_edit.compareTo(t1.last_edit);
+//         return template.last_edit.compareTo(t1.last_edit);
+         Log.d("testt", template.last_edit.toString()+t1.last_edit.toString());
+         return t1.last_edit.compareTo(template.last_edit);
       }
    }
    public static class UsedComparator implements Comparator<Template> {

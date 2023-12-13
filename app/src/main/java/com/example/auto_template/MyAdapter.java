@@ -142,6 +142,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
                 // editBtn과 중복 방지
                 if (!binding.recyclerEditBtn.isPressed()) {
                     toTemplateUseIntent = new Intent(context, TemplateUse.class);
+                    currentData.reference++;
                     toTemplateUseIntent
                             .putExtra("selected_template", currentData)
                             .putExtra("selected_item_position", getAbsoluteAdapterPosition());
@@ -156,9 +157,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
             binding.recyclerMain.setText(currentData.content);
             binding.recyclerLastEditText.setText(currentData.last_edit.toDate().toString());
         }
-        private String getClasses(){
-            return currentData.title.getClass().toString();
-        }
-    }
 
+    }
+    public ArrayList<Template> search(String input){
+        ArrayList<Template> resultItems = new ArrayList<>();
+        for (Template t : items) {
+            if(t.title.contains(input) || t.content.contains(input) || t.tag.contains(input))
+                resultItems.add(t);
+        }
+        return resultItems;
+    }
 }

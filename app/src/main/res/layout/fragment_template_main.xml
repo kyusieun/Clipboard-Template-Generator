@@ -17,7 +17,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/searchView"
-                android:background="@color/c3"
+                android:background="@color/c1"
                 app:iconifiedByDefault="false"
                 android:visibility="gone"
                 app:queryHint="hint"

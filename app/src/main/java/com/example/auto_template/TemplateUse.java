@@ -50,7 +50,6 @@ public class TemplateUse extends AppCompatActivity {
     public void showDialogs(List<List<Object>> parcedContent, int index, String content) {
         if (index >= parcedContent.size()) {
             String result =  replaceContent(content, parcedContent);
-
             toMainIntent = new Intent(this, MainActivity.class);
             toMainIntent.putExtra("template_use",result);
             startActivity(toMainIntent);
