@@ -36,6 +36,18 @@
                     android:layout_weight="1"
                     android:text="템플릿 이름"
                     android:textColor="@color/black"/>
+                <ImageButton
+                    android:id="@+id/recycler_deleteBtn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0"
+
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@color/c1"
+                    android:src="@drawable/close_icon"
+                    />
 
                 <ImageButton
                     tools:ignore="SpeakableTextPresentCheck"

@@ -85,6 +85,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
         private ViewHolder(TemplateRecyclerBinding binding, Context context){
             super(binding.getRoot());
             this.binding = binding;
+            binding.recyclerDeleteBtn.setOnClickListener(view -> {
+                //delete 구현
+            });
             binding.recyclerEditBtn.setOnClickListener(view -> {
                 toTemplateEditorIntent = new Intent(context, TemplateEditor.class);
                 toTemplateEditorIntent
