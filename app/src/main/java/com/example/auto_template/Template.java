@@ -127,13 +127,13 @@ public class Template implements Parcelable {
    public static class UsedComparator implements Comparator<Template> {
       @Override
       public int compare(Template template, Template t1) {
-         return template.latest_use.compareTo(t1.latest_use);
+         return t1.latest_use.compareTo(template.latest_use);
       }
    }
    public static class UsageComparator implements Comparator<Template> {
       @Override
       public int compare(Template template, Template t1) {
-         return Long.compare(template.reference, t1.reference);
+         return Long.compare(t1.reference,template.reference);
       }
    }
    public static class NameComparator implements Comparator<Template> {

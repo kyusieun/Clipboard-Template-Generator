@@ -17,6 +17,13 @@ import android.widget.Toast;
 
 
 import com.example.auto_template.databinding.TemplateUseBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -52,6 +59,28 @@ public class TemplateUse extends AppCompatActivity {
             String result =  replaceContent(content, parcedContent);
             toMainIntent = new Intent(this, MainActivity.class);
             toMainIntent.putExtra("template_use",result);
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String email = null;
+            if (user != null) {
+                email = user.getEmail();
+            }
+            DocumentReference docRef = db.collection(email).document(tempTemp.id);
+            docRef.update(
+                            "reference", tempTemp.reference++,
+                            "latest_use", Timestamp.now()
+                    ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("Firestore", "DocumentSnapshot successfully updated!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(Exception e) {
+                            Log.d("Firestore", "Error updating document", e);
+                        }
+                    });
             startActivity(toMainIntent);
             finish();
             return;
